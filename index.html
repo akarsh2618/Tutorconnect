@@ -1,0 +1,1259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>TutorConnect</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Sora:wght@700;800&display=swap');
+:root{
+--ink:#0f172a;--ink-mid:#334155;--ink-soft:#64748b;--ink-pale:#94a3b8;
+--sur:#f8fafc;--card:#fff;--bdr:#e2e8f0;--bdrs:#f1f5f9;
+--ac:#6366f1;--acl:#eef2ff;--acd:#4f46e5;
+--gr:#10b981;--grl:#ecfdf5;--rd:#ef4444;--rdl:#fef2f2;
+--am:#f59e0b;--aml:#fffbeb;--bl:#3b82f6;--bll:#eff6ff;
+--pu:#8b5cf6;--pul:#f5f3ff;--te:#14b8a6;--tel:#f0fdfa;
+--pk:#ec4899;--pkl:#fdf2f8;
+--r:14px;--rs:8px;--sh:0 1px 3px rgba(0,0,0,.06),0 4px 16px rgba(0,0,0,.04);
+--shm:0 4px 24px rgba(0,0,0,.09),0 1px 4px rgba(0,0,0,.04);
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html{-webkit-text-size-adjust:100%;height:100%;margin:0;padding:0}
+body{font-family:Inter,system-ui,-apple-system,sans-serif;background:var(--sur);color:var(--ink);min-height:100vh;font-size:14px;line-height:1.5;-webkit-font-smoothing:antialiased;margin:0;padding:0}
+#land{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px 20px;background:linear-gradient(135deg,#0f172a,#1e1b4b 55%,#312e81);position:relative;overflow:hidden}
+#land::before{content:'';position:absolute;width:500px;height:500px;border-radius:50%;background:radial-gradient(circle,rgba(99,102,241,.18),transparent 70%);top:-150px;right:-150px;pointer-events:none}
+.brand{text-align:center;margin-bottom:44px;position:relative;z-index:1}
+.bname{font-family:Sora,sans-serif;font-size:36px;font-weight:800;color:#fff;letter-spacing:-1.5px}
+.bname span{color:#a5b4fc}
+.btag{color:#94a3b8;font-size:13px;margin-top:9px;line-height:1.5}
+.rgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;max-width:400px;width:100%;position:relative;z-index:1}
+.rcard{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.13);border-radius:18px;padding:20px 15px;cursor:pointer;transition:background .18s,transform .15s;text-align:center;-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px)}
+.rcard:active{transform:scale(.96);background:rgba(255,255,255,.15)}
+.ricon{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:20px;margin:0 auto 10px}
+.rcard h3{color:#fff;font-size:14px;font-weight:700;margin-bottom:3px}
+.rcard p{color:#94a3b8;font-size:11px;line-height:1.4}
+#app{display:none;min-height:100vh;flex-direction:column}
+#app.on{display:flex}
+.topbar{background:var(--card);border-bottom:1px solid var(--bdr);padding:0 15px;height:52px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:90}
+.tbl{display:flex;align-items:center;gap:9px;min-width:0}
+.tlogo{font-family:Sora,sans-serif;font-weight:800;font-size:15px;color:var(--ac);letter-spacing:-.5px;white-space:nowrap}
+.tdiv{width:1px;height:15px;background:var(--bdr);flex-shrink:0}
+.trole{font-size:10px;font-weight:600;color:var(--ink-soft);text-transform:uppercase;letter-spacing:.6px;white-space:nowrap}
+.tbr{display:flex;align-items:center;gap:8px}
+.backbtn{background:var(--sur);border:1px solid var(--bdr);border-radius:var(--rs);padding:5px 10px;font-size:11px;font-weight:600;color:var(--ink-mid);cursor:pointer;font-family:inherit;-webkit-appearance:none;white-space:nowrap}
+.uav{width:28px;height:28px;border-radius:50%;background:var(--ac);color:#fff;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700}
+.nscroll{background:var(--card);border-bottom:1px solid var(--bdr);overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;position:sticky;top:52px;z-index:89}
+.nscroll::-webkit-scrollbar{display:none}
+.ntabs{display:flex;gap:2px;padding:7px 12px;min-width:max-content}
+.ntab{padding:6px 12px;border-radius:var(--rs);border:none;background:transparent;font-size:12px;font-weight:500;color:var(--ink-soft);cursor:pointer;white-space:nowrap;font-family:inherit;-webkit-appearance:none}
+.ntab.on{background:var(--acl);color:var(--ac);font-weight:600}
+.main{padding:15px 13px;flex:1;max-width:1100px;margin:0 auto;width:100%;padding-bottom:calc(15px + env(safe-area-inset-bottom,0px))}
+.shd{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:14px;flex-wrap:wrap;gap:9px}
+.stitle{font-family:Sora,sans-serif;font-size:17px;font-weight:700}
+.ssub{font-size:11px;color:var(--ink-soft);margin-top:2px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media(max-width:500px){.two{grid-template-columns:1fr}}
+.sg{display:grid;grid-template-columns:repeat(2,1fr);gap:9px;margin-bottom:15px}
+@media(min-width:600px){.sg{grid-template-columns:repeat(4,1fr)}}
+.sc{background:var(--card);border:1px solid var(--bdr);border-radius:var(--r);padding:12px;box-shadow:var(--sh)}
+.sl{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.6px;color:var(--ink-soft);margin-bottom:4px}
+.sv{font-family:Sora,sans-serif;font-size:21px;font-weight:700;line-height:1.1}
+.sv.a{color:var(--ac)}.sv.g{color:var(--gr)}.sv.r{color:var(--rd)}.sv.am{color:var(--am)}.sv.p{color:var(--pu)}
+.sbdg{display:inline-flex;align-items:center;font-size:10px;font-weight:600;padding:2px 7px;border-radius:20px;margin-top:4px}
+.sg-g{background:var(--grl);color:var(--gr)}.sg-a{background:var(--aml);color:var(--am)}
+.sg-b{background:var(--bll);color:var(--bl)}.sg-r{background:var(--rdl);color:var(--rd)}
+.card{background:var(--card);border:1px solid var(--bdr);border-radius:var(--r);box-shadow:var(--sh);overflow:hidden;margin-bottom:12px}
+.chd{padding:11px 14px;border-bottom:1px solid var(--bdrs);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:7px}
+.ctitle{font-size:13px;font-weight:700}
+.tw{overflow-x:auto;-webkit-overflow-scrolling:touch}
+table{width:100%;border-collapse:collapse;min-width:360px}
+th{text-align:left;padding:8px 12px;font-size:10px;font-weight:600;color:var(--ink-pale);text-transform:uppercase;letter-spacing:.5px;background:var(--bdrs);border-bottom:1px solid var(--bdr)}
+td{padding:9px 12px;border-bottom:1px solid var(--bdrs);font-size:12px;color:var(--ink-mid);vertical-align:middle}
+tr:last-child td{border-bottom:none}
+tr.cr{cursor:pointer}
+tr.cr:active td{background:#f0f4ff}
+.bdg{display:inline-flex;align-items:center;gap:3px;padding:2px 7px;border-radius:20px;font-size:10px;font-weight:600;white-space:nowrap}
+.bg{background:var(--grl);color:var(--gr)}.br{background:var(--rdl);color:var(--rd)}
+.ba{background:var(--aml);color:var(--am)}.bb{background:var(--bll);color:var(--bl)}
+.bp{background:var(--pul);color:var(--pu)}.bk{background:var(--bdrs);color:var(--ink-soft)}
+.bpk{background:var(--pkl);color:var(--pk)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:4px;padding:7px 13px;border-radius:var(--rs);font-size:12px;font-weight:600;cursor:pointer;border:none;font-family:inherit;-webkit-appearance:none;white-space:nowrap;transition:opacity .15s}
+.btn:active{opacity:.78}
+.bp2{background:var(--ac);color:#fff}.bo{background:#fff;color:var(--ink);border:1px solid var(--bdr)}
+.bg2{background:var(--gr);color:#fff}.br2{background:var(--rd);color:#fff}
+.bgh{background:transparent;color:var(--ink-soft);border:1px solid var(--bdr)}
+.bsm{padding:5px 9px;font-size:11px}.bxs{padding:3px 7px;font-size:10px}
+.savc{display:flex;align-items:center;gap:8px}
+.sav{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:#fff;flex-shrink:0}
+.sn{font-weight:600;color:var(--ink);font-size:12px}.sg2{font-size:10px;color:var(--ink-pale)}
+.pb{background:var(--bdrs);border-radius:99px;height:5px;overflow:hidden;margin-top:4px}
+.pf{height:100%;border-radius:99px;background:var(--ac)}
+.pf.g{background:var(--gr)}.pf.a{background:var(--am)}.pf.r{background:var(--rd)}
+.mov{display:none;position:fixed;inset:0;background:rgba(15,23,42,.55);z-index:200;align-items:flex-end;justify-content:center;-webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px)}
+.mov.open{display:flex}
+@media(min-width:540px){.mov{align-items:center}}
+.modal{background:var(--card);border-radius:20px 20px 0 0;padding:20px 16px 32px;width:100%;max-width:480px;box-shadow:var(--shm);max-height:90vh;overflow-y:auto;-webkit-overflow-scrolling:touch}
+@media(min-width:540px){.modal{border-radius:20px;padding:22px;max-height:88vh}}
+.mt{font-family:Sora,sans-serif;font-size:16px;font-weight:700;margin-bottom:3px}
+.ms{font-size:12px;color:var(--ink-soft);margin-bottom:16px}
+.mf{display:flex;gap:8px;justify-content:flex-end;margin-top:16px;flex-wrap:wrap}
+.fr{margin-bottom:12px}.fl{display:block;font-size:11px;font-weight:600;color:var(--ink-mid);margin-bottom:4px}
+.fi,.fsl,.fta{width:100%;padding:9px 11px;border:1.5px solid var(--bdr);border-radius:var(--rs);font-size:13px;color:var(--ink);background:#fff;font-family:inherit;-webkit-appearance:none;appearance:none}
+.fsl{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%2394a3b8' d='M6 8L1 3h10z'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 9px center;padding-right:26px}
+.fta{resize:vertical;min-height:65px}
+.fi:focus,.fsl:focus,.fta:focus{outline:none;border-color:var(--ac);box-shadow:0 0 0 3px rgba(99,102,241,.1)}
+.fr2{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+@media(max-width:380px){.fr2{grid-template-columns:1fr}}
+.toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%) translateY(18px);background:#1e293b;color:#fff;padding:9px 16px;border-radius:11px;font-size:12px;font-weight:500;z-index:999;opacity:0;transition:all .22s;pointer-events:none;max-width:calc(100vw - 30px);text-align:center;white-space:nowrap}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.toast.ts{background:var(--gr)}.toast.ti{background:var(--ac)}.toast.tw{background:var(--am)}
+.si{display:flex;gap:10px;padding:11px 14px;border-bottom:1px solid var(--bdrs);align-items:flex-start}
+.si:last-child{border-bottom:none}
+.si-t{font-size:10px;font-weight:700;color:var(--ac);min-width:65px;line-height:1.5;flex-shrink:0}
+.si-d{width:8px;height:8px;border-radius:50%;flex-shrink:0;margin-top:4px}
+.si-i{flex:1;min-width:0}
+.si-n{font-size:13px;font-weight:600}.si-m{font-size:11px;color:var(--ink-soft);margin-top:1px}
+.ri{display:flex;align-items:flex-start;gap:10px;padding:11px 14px;border-bottom:1px solid var(--bdrs)}
+.ri:last-child{border-bottom:none}
+.ric{width:34px;height:34px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0}
+.rib{flex:1;min-width:0}
+.rit{font-size:13px;font-weight:600}.rim{font-size:11px;color:var(--ink-soft);margin-top:2px}
+.ea{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:10px;margin-bottom:7px;border:1px solid}
+.ea-d{background:var(--rdl);border-color:#fca5a5}
+.ea-w{background:var(--aml);border-color:#fcd34d}
+.ea-i{background:var(--bll);border-color:#93c5fd}
+.pr{display:flex;align-items:center;gap:10px;padding:11px 14px;border-bottom:1px solid var(--bdrs);cursor:pointer}
+.pr:last-child{border-bottom:none}
+.pr:active{background:var(--bdrs)}
+.prb{font-size:13px;font-weight:800;color:var(--rd)}
+.prb.pd{color:var(--gr)}
+.ci{display:flex;align-items:center;gap:9px;padding:10px 14px;border-bottom:1px solid var(--bdrs);cursor:pointer}
+.ci:last-child{border-bottom:none}
+.ci:active{background:var(--bdrs)}
+.cc{width:17px;height:17px;border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:9px;flex-shrink:0;border:2px solid var(--bdr)}
+.cc.dn{background:var(--gr);border-color:var(--gr);color:#fff}
+.mfi{display:flex;align-items:center;gap:10px;padding:10px 14px;border-bottom:1px solid var(--bdrs)}
+.mfi:last-child{border-bottom:none}
+.mfic{width:33px;height:33px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
+.mfn{font-size:12px;font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.mfm{font-size:10px;color:var(--ink-soft);margin-top:1px}
+.tgrid{display:grid;grid-template-columns:1fr;gap:12px}
+@media(min-width:600px){.tgrid{grid-template-columns:repeat(2,1fr)}}
+.tc{background:var(--card);border:1px solid var(--bdr);border-radius:var(--r);padding:15px;box-shadow:var(--sh)}
+.wid{background:var(--card);border:1px solid var(--bdr);border-radius:var(--r);box-shadow:var(--sh);overflow:hidden;margin-bottom:12px}
+.wh{padding:11px 14px;border-bottom:1px solid var(--bdrs);font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:space-between}
+.ws{font-size:11px;font-weight:500;color:var(--ac);cursor:pointer;background:none;border:none;font-family:inherit}
+.aic{display:flex;gap:10px;padding:11px 14px;border-bottom:1px solid var(--bdrs);align-items:flex-start}
+.aic:last-child{border-bottom:none}
+.aicn{width:29px;height:29px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0}
+.inv{background:#fff;border:1px solid var(--bdr);border-radius:11px;padding:18px;font-size:12px}
+.invh{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:15px;padding-bottom:12px;border-bottom:2px solid var(--ink)}
+.invl{font-family:Sora,sans-serif;font-size:16px;font-weight:800;color:var(--ac)}
+.invt{width:100%;border-collapse:collapse;margin:11px 0;font-size:11px}
+.invt th{text-align:left;padding:6px 7px;background:var(--bdrs);font-weight:700}
+.invt td{padding:6px 7px;border-bottom:1px solid var(--bdrs)}
+.hi{padding:11px 14px;border-bottom:1px solid var(--bdrs)}
+.hi:last-child{border-bottom:none}
+.hid{font-size:12px;font-weight:700;margin-bottom:3px}
+.hit{font-size:11px;color:var(--ink-soft)}
+.fbar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}
+.fbar .fi{flex:1;min-width:140px}
+.fbar .fsl{flex:1;min-width:110px}
+.empty{text-align:center;padding:34px 18px;color:var(--ink-soft)}
+.ei{font-size:32px;margin-bottom:9px}
+.empty h4{font-size:14px;font-weight:600;color:var(--ink-mid);margin-bottom:3px}
+.empty p{font-size:12px}
+</style>
+</head>
+<body>
+<div id="land">
+  <div class="brand">
+    <div class="bname">Tutor<span>Connect</span></div>
+    <div class="btag">Manage Students, Classes, Fees and Tutors in One Place</div>
+  </div>
+  <div class="rgrid">
+    <div class="rcard" onclick="go('teacher')">
+      <div class="ricon" style="background:rgba(99,102,241,.2)">📚</div>
+      <h3>Teacher</h3><p>Classes, attendance &amp; syllabus</p>
+    </div>
+    <div class="rcard" onclick="go('coordinator')">
+      <div class="ricon" style="background:rgba(16,185,129,.2)">🗂️</div>
+      <h3>Coordinator</h3><p>Students, teachers &amp; fees</p>
+    </div>
+    <div class="rcard" onclick="go('founder')">
+      <div class="ricon" style="background:rgba(245,158,11,.2)">📊</div>
+      <h3>Founder</h3><p>Revenue, growth &amp; analytics</p>
+    </div>
+    <div class="rcard" onclick="go('finder')">
+      <div class="ricon" style="background:rgba(236,72,153,.2)">🔍</div>
+      <h3>Tutor Finder</h3><p>Find &amp; hire qualified tutors</p>
+    </div>
+  </div>
+</div>
+<div id="app">
+  <div class="topbar">
+    <div class="tbl">
+      <span class="tlogo">TutorConnect</span>
+      <div class="tdiv"></div>
+      <span class="trole" id="rLabel">Teacher</span>
+    </div>
+    <div class="tbr">
+      <button class="backbtn" onclick="goBack()">← Roles</button>
+      <div class="uav" id="uav">T</div>
+    </div>
+  </div>
+  <div class="nscroll"><div class="ntabs" id="ntabs"></div></div>
+  <div class="main" id="mc"></div>
+</div>
+<div class="mov" id="mov" onclick="cm(event)">
+  <div class="modal"><div id="mi"></div></div>
+</div>
+<div class="toast" id="tst"></div>
+<script>
+// ═══ HELPERS ═══
+const TD='2026-06-23';
+const ini=n=>n.split(' ').map(x=>x[0]).slice(0,2).join('');
+const fc=n=>'₹'+Number(n).toLocaleString('en-IN');
+const fd=d=>{const t=new Date(d+'T00:00:00');return t.toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'})};
+const fds=d=>{const t=new Date(d+'T00:00:00');return t.toLocaleDateString('en-IN',{day:'numeric',month:'short'})};
+const du=d=>Math.ceil((new Date(d+'T00:00:00')-new Date(TD+'T00:00:00'))/86400000);
+const f12=t=>{if(!t)return'';const[h,m]=t.split(':');const r=+h;return`${r>12?r-12:(r||12)}:${m} ${r>=12?'PM':'AM'}`};
+const pct=(a,b)=>b?Math.round(a/b*100):0;
+function toast(msg,type=''){const e=document.getElementById('tst');e.textContent=msg;e.className='toast show '+(type||'');clearTimeout(e._t);e._t=setTimeout(()=>e.className='toast',3000)}
+function om(html){document.getElementById('mi').innerHTML=html;document.getElementById('mov').classList.add('open')}
+function cm(e){if(!e||e.target===document.getElementById('mov'))document.getElementById('mov').classList.remove('open')}
+
+// ═══ DATA ═══
+const COLS=['#6366f1','#10b981','#f59e0b','#ef4444','#8b5cf6','#14b8a6','#f97316','#ec4899','#84cc16','#0ea5e9'];
+const teachers=[
+  {id:1,name:'Mr. Suresh Kumar',subject:'Mathematics',color:'#6366f1',exp:'8 yrs',qual:'M.Sc. Maths'},
+  {id:2,name:'Ms. Anita Verma',subject:'Physics & Chemistry',color:'#10b981',exp:'6 yrs',qual:'M.Sc. Physics'},
+  {id:3,name:'Mr. Rajan Pillai',subject:'Biology',color:'#f59e0b',exp:'5 yrs',qual:'M.Sc. Biology'},
+  {id:4,name:'Ms. Deepa Nair',subject:'English & History',color:'#ef4444',exp:'7 yrs',qual:'M.A. English'},
+  {id:5,name:'Mr. Amit Shah',subject:'Science',color:'#8b5cf6',exp:'4 yrs',qual:'B.Tech+B.Ed'},
+];
+const CH={
+  ma:['Real Numbers','Polynomials','Linear Equations','Quadratic Equations','AP','Triangles','Coordinate Geometry','Circles','Statistics','Probability'],
+  ph:['Units & Dimensions','Kinematics','Laws of Motion','Work & Energy','Gravitation','Thermodynamics','Waves','Electrostatics','Current Electricity','Magnetism'],
+  ch:['Solutions','Electrochemistry','Chemical Kinetics','Surface Chemistry','p-Block Elements','d-Block Elements','Coordination Compounds','Haloalkanes','Biomolecules','Polymers'],
+  bi:['Cell Biology','Genetics','Human Physiology','Plant Physiology','Ecology','Biotechnology','Evolution','Reproduction','Biomolecules','Ecosystems'],
+  en:['Reading Comprehension','Grammar','Essay Writing','Poetry Analysis','Short Stories','Letter Writing','Novel Study','Vocabulary','Debate Skills','Critical Thinking'],
+  sc:['Force & Motion','Light & Sound','Electricity','Magnetism','Chemical Reactions','Acids & Bases','Carbon Compounds','Life Processes','Control & Coordination','Environment'],
+  hi:['Ancient India','Medieval India','Modern India','World History','Nationalism','Economic History','Social Movements','Constitution','Foreign Policy','Contemporary Issues'],
+};
+function genAtt(cl,cd){
+  const r=[];const b=new Date(2026,5,1);
+  [-2,-1,0].forEach(mo=>{for(let d=1;d<=30;d+=3){const dt=new Date(b.getFullYear(),b.getMonth()+mo,d);if(dt>new Date(TD+'T00:00:00'))return;const ok=Math.random()>.18;const hr=14+Math.floor(Math.random()*6);const mn=Math.random()>.5?'00':'30';r.push({date:dt.toISOString().split('T')[0],status:ok?'present':'absent',chapter:'',st:`${hr}:${mn}`,et:`${hr+1}:${mn}`,dur:'1 hr',notes:''});}});
+  let ci=0;r.forEach(x=>{if(x.status==='present'&&ci<cl.length)x.chapter=cl[ci++]});return r;
+}
+const students=[
+  {id:1,name:'Rahul Sharma',grade:'Class 10',subject:'Maths',fpc:500,color:COLS[0],tid:1,paid:4500,cd:8,cl:CH.ma,exams:[{name:'Unit Test 1',subject:'Maths',date:'2026-06-28'},{name:'Half Yearly',subject:'Maths',date:'2026-07-15'}],flags:[]},
+  {id:2,name:'Priya Patel',grade:'Class 9',subject:'Science',fpc:450,color:COLS[1],tid:5,paid:3150,cd:6,cl:CH.sc,exams:[{name:'Science Test',subject:'Science',date:'2026-06-25'},{name:'Term Exam',subject:'Science',date:'2026-07-20'}],flags:['Missing entry on 2026-05-18']},
+  {id:3,name:'Arjun Mehta',grade:'Class 11',subject:'Physics',fpc:600,color:COLS[2],tid:2,paid:5400,cd:7,cl:CH.ph,exams:[{name:'Physics Practical',subject:'Physics',date:'2026-06-27'},{name:'Annual Exam',subject:'Physics',date:'2026-07-10'}],flags:['Attendance edited on 2026-04-12']},
+  {id:4,name:'Sneha Joshi',grade:'Class 8',subject:'English',fpc:350,color:COLS[3],tid:4,paid:2450,cd:5,cl:CH.en,exams:[{name:'English Test',subject:'English',date:'2026-07-02'}],flags:[]},
+  {id:5,name:'Vikram Nair',grade:'Class 12',subject:'Chemistry',fpc:650,color:COLS[4],tid:2,paid:7000,cd:9,cl:CH.ch,exams:[{name:'Chem Board Mock',subject:'Chemistry',date:'2026-06-29'},{name:'Board Exam',subject:'Chemistry',date:'2026-07-25'}],flags:[]},
+  {id:6,name:'Meera Krishnan',grade:'Class 11',subject:'Biology',fpc:550,color:COLS[5],tid:3,paid:4400,cd:6,cl:CH.bi,exams:[{name:'Bio Test',subject:'Biology',date:'2026-07-01'}],flags:['Attendance not marked on 2026-05-22']},
+  {id:7,name:'Rohan Desai',grade:'Class 9',subject:'Maths',fpc:480,color:COLS[6],tid:1,paid:2880,cd:5,cl:CH.ma,exams:[{name:'Maths Quiz',subject:'Maths',date:'2026-06-30'}],flags:[]},
+  {id:8,name:'Kavya Singh',grade:'Class 10',subject:'Science',fpc:420,color:COLS[7],tid:5,paid:2520,cd:7,cl:CH.sc,exams:[{name:'Science Board Mock',subject:'Science',date:'2026-07-05'}],flags:[]},
+  {id:9,name:'Aditya Rao',grade:'Class 12',subject:'History',fpc:400,color:COLS[8],tid:4,paid:2800,cd:8,cl:CH.hi,exams:[{name:'History Final',subject:'History',date:'2026-07-08'}],flags:['Attendance edited on 2026-03-20']},
+  {id:10,name:'Divya Menon',grade:'Class 11',subject:'Chemistry',fpc:620,color:COLS[9],tid:2,paid:5580,cd:8,cl:CH.ch,exams:[{name:'Chemistry Test',subject:'Chemistry',date:'2026-06-26'},{name:'Annual Exam',subject:'Chemistry',date:'2026-07-22'}],flags:[]},
+];
+students.forEach(s=>{s.att=genAtt(s.cl,s.cd)});
+const cp=s=>s.att.filter(a=>a.status==='present').length;
+const ca=s=>s.att.filter(a=>a.status==='absent').length;
+const tf=s=>cp(s)*s.fpc;
+const bal=s=>tf(s)-s.paid;
+
+const sch=[
+  {id:1,sid:1,subj:'Maths',date:'2026-06-23',st:'18:00',et:'19:00',notes:'Quadratic revision',tid:1},
+  {id:2,sid:2,subj:'Science',date:'2026-06-23',st:'17:00',et:'18:00',notes:'Light chapter',tid:5},
+  {id:3,sid:7,subj:'Maths',date:'2026-06-23',st:'19:30',et:'20:30',notes:'',tid:1},
+  {id:4,sid:3,subj:'Physics',date:'2026-06-24',st:'16:00',et:'17:00',notes:'',tid:2},
+  {id:5,sid:5,subj:'Chemistry',date:'2026-06-24',st:'19:00',et:'20:00',notes:'Board prep',tid:2},
+  {id:6,sid:4,subj:'English',date:'2026-06-25',st:'15:00',et:'16:00',notes:'Essay writing',tid:4},
+  {id:7,sid:6,subj:'Biology',date:'2026-06-26',st:'16:00',et:'17:00',notes:'',tid:3},
+  {id:8,sid:10,subj:'Chemistry',date:'2026-06-26',st:'18:00',et:'19:00',notes:'',tid:2},
+  {id:9,sid:8,subj:'Science',date:'2026-06-27',st:'14:00',et:'15:00',notes:'',tid:5},
+  {id:10,sid:9,subj:'History',date:'2026-06-23',st:'20:00',et:'21:00',notes:'Final revisions',tid:4},
+];
+const mats=[
+  {id:1,sid:1,subj:'Maths',name:'Quadratic Equations Notes.pdf',type:'pdf',size:'1.2 MB',date:'2026-06-20',by:'Mr. Suresh Kumar'},
+  {id:2,sid:1,subj:'Maths',name:'Practice Worksheet - Polynomials.pdf',type:'worksheet',size:'840 KB',date:'2026-06-18',by:'Mr. Suresh Kumar'},
+  {id:3,sid:2,subj:'Science',name:'Light Chapter Summary.pdf',type:'pdf',size:'560 KB',date:'2026-06-19',by:'Mr. Amit Shah'},
+  {id:4,sid:2,subj:'Science',name:'Diagram - Refraction.png',type:'image',size:'420 KB',date:'2026-06-17',by:'Mr. Amit Shah'},
+  {id:5,sid:3,subj:'Physics',name:'Kinematics Formula Sheet.pdf',type:'pdf',size:'300 KB',date:'2026-06-15',by:'Ms. Anita Verma'},
+  {id:6,sid:4,subj:'English',name:'Essay Writing Guide.pdf',type:'notes',size:'540 KB',date:'2026-06-11',by:'Ms. Deepa Nair'},
+  {id:7,sid:5,subj:'Chemistry',name:'Electrochemistry Notes.pdf',type:'pdf',size:'1.4 MB',date:'2026-06-21',by:'Ms. Anita Verma'},
+  {id:8,sid:5,subj:'Chemistry',name:'Board Mock Paper.pdf',type:'worksheet',size:'980 KB',date:'2026-06-22',by:'Ms. Anita Verma'},
+  {id:9,sid:6,subj:'Biology',name:'Cell Biology Diagrams.png',type:'image',size:'2.1 MB',date:'2026-06-16',by:'Mr. Rajan Pillai'},
+  {id:10,sid:7,subj:'Maths',name:'Arithmetic Progressions.pdf',type:'pdf',size:'450 KB',date:'2026-06-14',by:'Mr. Suresh Kumar'},
+  {id:11,sid:8,subj:'Science',name:'Environment Chapter Notes.pdf',type:'notes',size:'620 KB',date:'2026-06-13',by:'Mr. Amit Shah'},
+  {id:12,sid:9,subj:'History',name:'Modern India Summary.pdf',type:'notes',size:'890 KB',date:'2026-06-10',by:'Ms. Deepa Nair'},
+  {id:13,sid:10,subj:'Chemistry',name:'Haloalkanes Practice Set.pdf',type:'worksheet',size:'760 KB',date:'2026-06-22',by:'Ms. Anita Verma'},
+];
+const rems=[
+  {id:1,title:'Collect fees from Rahul',type:'fee',sid:1,date:'2026-06-23',time:'11:00',pri:'high',notes:'₹1000 pending',done:false},
+  {id:2,title:'Priya Science exam prep',type:'exam',sid:2,date:'2026-06-24',time:'16:00',pri:'high',notes:'Exam on 25th',done:false},
+  {id:3,title:"Parent meeting - Arjun's mom",type:'parent',sid:3,date:'2026-06-24',time:'18:00',pri:'medium',notes:'Progress discussion',done:false},
+  {id:4,title:'Follow up homework - Rohan',type:'homework',sid:7,date:'2026-06-23',time:'19:00',pri:'medium',notes:'Check exercise 4',done:false},
+  {id:5,title:'Vikram Chemistry board prep',type:'exam',sid:5,date:'2026-06-26',time:'09:00',pri:'high',notes:'Mock test',done:false},
+  {id:6,title:'Collect fees from Sneha',type:'fee',sid:4,date:'2026-06-25',time:'15:00',pri:'medium',notes:'Monthly fee due',done:false},
+  {id:7,title:'Class rescheduled - Meera',type:'class',sid:6,date:'2026-06-27',time:'17:00',pri:'low',notes:'Moved from Friday',done:true},
+  {id:8,title:'Divya Chemistry test prep',type:'exam',sid:10,date:'2026-06-25',time:'10:00',pri:'high',notes:'',done:false},
+  {id:9,title:'Prepare new worksheets',type:'custom',sid:null,date:'2026-06-28',time:'09:00',pri:'low',notes:'For Class 10 batch',done:false},
+];
+const tutors=[
+  {id:1,name:'Dr. Preethi Ramesh',subjects:['Mathematics','Physics'],exp:'12 years',location:'Bangalore',level:['Class 8-10','Class 11-12','JEE'],qual:'Ph.D. Maths – IIT Madras',avail:'Mon-Sat 3-9PM',fee:1200,color:'#6366f1',rating:4.9,rev:87},
+  {id:2,name:'Mr. Kiran Ghosh',subjects:['Chemistry','Biology'],exp:'9 years',location:'Pune',level:['Class 9-10','Class 11-12','NEET'],qual:'M.Sc. Chemistry – Pune Univ.',avail:'Tue-Sun 4-8PM',fee:900,color:'#10b981',rating:4.7,rev:63},
+  {id:3,name:'Ms. Sonia Mathur',subjects:['English','Social Science'],exp:'7 years',location:'Delhi',level:['Class 6-8','Class 9-10'],qual:'M.A. English – Delhi Univ.',avail:'Mon-Fri 2-7PM',fee:700,color:'#f59e0b',rating:4.8,rev:51},
+  {id:4,name:'Mr. Rajesh Iyer',subjects:['Physics','Maths'],exp:'15 years',location:'Chennai',level:['Class 11-12','JEE','NEET'],qual:'M.Tech – IIT Bombay',avail:'Daily 6-10PM',fee:1500,color:'#ef4444',rating:5.0,rev:112},
+  {id:5,name:'Ms. Ayesha Khan',subjects:['Biology','Chemistry'],exp:'6 years',location:'Hyderabad',level:['Class 8-10','Class 11-12','NEET'],qual:'M.Sc. Biology – Osmania Univ.',avail:'Mon-Sat 3-8PM',fee:850,color:'#8b5cf6',rating:4.6,rev:44},
+  {id:6,name:'Mr. Deepak Tiwari',subjects:['Mathematics','Accountancy'],exp:'10 years',location:'Mumbai',level:['Class 9-10','Class 11-12','CA Foundation'],qual:'M.Com + B.Ed – Mumbai Univ.',avail:'Tue-Sat 5-9PM',fee:1000,color:'#14b8a6',rating:4.8,rev:76},
+  {id:7,name:'Ms. Lakshmi Nair',subjects:['Hindi','Sanskrit'],exp:'8 years',location:'Kochi',level:['Class 6-8','Class 9-10','Class 11-12'],qual:'M.A. Sanskrit – Kerala Univ.',avail:'Mon-Fri 3-7PM',fee:600,color:'#f97316',rating:4.5,rev:38},
+  {id:8,name:'Mr. Sudhir Pandey',subjects:['Physics','Chemistry','Maths'],exp:'13 years',location:'Lucknow',level:['Class 11-12','JEE','NEET'],qual:'M.Sc. Physics – BHU',avail:'Daily 7-10AM & 6-10PM',fee:1100,color:'#ec4899',rating:4.9,rev:94},
+];
+
+// helpers
+const miIc=t=>({pdf:'📄',image:'🖼️',worksheet:'📝',notes:'📋'}[t]||'📎');
+const miCo=t=>({pdf:'var(--rdl)',image:'var(--bll)',worksheet:'var(--grl)',notes:'var(--aml)'}[t]||'var(--bdrs)');
+const remIc=t=>({fee:'💰',exam:'📝',class:'📅',parent:'👨‍👩‍👧',homework:'📚',custom:'⭐'}[t]||'🔔');
+const remCo=t=>({fee:'var(--grl)',exam:'var(--rdl)',class:'var(--bll)',parent:'var(--pul)',homework:'var(--aml)',custom:'var(--tel)'}[t]||'var(--bdrs)');
+const priB=p=>({high:'br',medium:'ba',low:'bg'}[p]||'bk');
+const priL=p=>({high:'High',medium:'Medium',low:'Low'}[p]||p);
+const svc=(s,sub)=>`<div class="savc"><div class="sav" style="background:${s.color}">${ini(s.name)}</div><div><div class="sn">${s.name}</div><div class="sg2">${sub||s.grade}</div></div></div>`;
+
+// ═══ NAV ═══
+let role='',vw='';
+function go(r){
+  role=r;
+  document.getElementById('land').style.display='none';
+  document.getElementById('app').classList.add('on');
+  const nm={teacher:'Teacher',coordinator:'Coordinator',founder:'Founder',finder:'Tutor Finder'};
+  const av={teacher:'SK',coordinator:'AC',founder:'FD',finder:'TF'};
+  document.getElementById('rLabel').textContent=nm[r];
+  document.getElementById('uav').textContent=av[r];
+  if(r==='teacher')setupT();
+  else if(r==='coordinator')setupC();
+  else if(r==='founder')setupF();
+  else setupFi();
+}
+function goBack(){document.getElementById('app').classList.remove('on');document.getElementById('land').style.display='flex';role='';vw='';}
+function sv(id){vw=id;document.querySelectorAll('.ntab').forEach(t=>t.classList.toggle('on',t.dataset.v===id));document.getElementById('mc').innerHTML='';rv(id)}
+function rv(id){if(role==='teacher')rT(id);else if(role==='coordinator')rC(id);else if(role==='founder')rF(id);else rFi(id)}
+function bn(tabs){document.getElementById('ntabs').innerHTML=tabs.map(t=>`<button class="ntab" data-v="${t.id}" onclick="sv('${t.id}')">${t.l}</button>`).join('')}
+
+// ═══ TEACHER ═══
+function setupT(){bn([
+  {id:'t_home',l:'🏠 Home'},{id:'t_sched',l:'📅 Schedule'},
+  {id:'t_stu',l:'👥 Students'},{id:'t_att',l:'✅ Attendance'},
+  {id:'t_syl',l:'📖 Syllabus'},{id:'t_ex',l:'📝 Exams'},
+  {id:'t_mat',l:'📁 Materials'},{id:'t_rem',l:'🔔 Reminders'},
+  {id:'t_hist',l:'🕐 History'},{id:'t_sum',l:'📈 Summary'},
+]);sv('t_home')}
+
+function rT(id){
+  const mc=document.getElementById('mc');
+  const myS=students.filter(s=>s.tid===1);
+  const tSch=sch.filter(c=>c.date===TD&&c.tid===1);
+  const tmSch=sch.filter(c=>c.date==='2026-06-24'&&c.tid===1);
+  const upEx=myS.flatMap(s=>s.exams.map(e=>({...e,student:s,d:du(e.date)}))).filter(e=>e.d>=0&&e.d<=7).sort((a,b)=>a.d-b.d);
+  const pendR=rems.filter(r=>!r.done&&du(r.date)<=2&&du(r.date)>=0).slice(0,4);
+  const recM=mats.filter(m=>myS.some(s=>s.id===m.sid)).slice(-3).reverse();
+
+  if(id==='t_home'){
+    mc.innerHTML=`
+    <div class="shd"><div><div class="stitle">Good Morning, Suresh! 👋</div>
+    <div class="ssub">${fd(TD)} · ${tSch.length} class${tSch.length!==1?'es':''} today</div></div></div>
+    <div class="sg">
+      <div class="sc"><div class="sl">My Students</div><div class="sv a">${myS.length}</div></div>
+      <div class="sc"><div class="sl">Today's Classes</div><div class="sv am">${tSch.length}</div></div>
+      <div class="sc"><div class="sl">Pending Fees</div><div class="sv r" style="font-size:15px">${fc(myS.reduce((a,s)=>a+Math.max(0,bal(s)),0))}</div></div>
+      <div class="sc"><div class="sl">Exams This Week</div><div class="sv p">${upEx.length}</div></div>
+    </div>
+    ${upEx.length?`<div class="wid"><div class="wh">⚠️ Upcoming Exams <button class="ws" onclick="sv('t_ex')">See all</button></div>
+    ${upEx.slice(0,3).map(e=>`<div class="ea ${e.d<=1?'ea-d':e.d<=3?'ea-w':'ea-i'}" style="margin:8px">
+      <span style="font-size:15px">${e.d<=1?'🚨':e.d<=3?'⚠️':'📅'}</span>
+      <div style="flex:1;min-width:0"><div style="font-size:12px;font-weight:700">${e.name} — ${e.student.name}</div>
+      <div style="font-size:11px;color:var(--ink-soft)">${e.subject} · ${fd(e.date)}</div></div>
+      <span class="bdg ${e.d<=1?'br':e.d<=3?'ba':'bb'}">${e.d===0?'Today':e.d===1?'Tomorrow':'In '+e.d+'d'}</span>
+    </div>`).join('')}</div>`:''}
+    <div class="wid"><div class="wh">📍 Today's Classes <button class="ws" onclick="sv('t_sched')">Schedule</button></div>
+    ${tSch.length?tSch.map(c=>{const s=students.find(x=>x.id===c.sid);return`
+    <div class="si"><div class="si-t">${f12(c.st)}<br>${f12(c.et)}</div>
+    <div class="si-d" style="background:${s.color}"></div>
+    <div class="si-i"><div class="si-n">${s.name}</div><div class="si-m">${c.subj}${c.notes?' · '+c.notes:''}</div></div>
+    <button class="btn bg2 bsm" onclick="markDone(${c.id})">Done ✓</button>
+    </div>`}).join(''):`<div class="empty" style="padding:18px"><p>No classes today</p></div>`}</div>
+    ${pendR.length?`<div class="wid"><div class="wh">🔔 Reminders <button class="ws" onclick="sv('t_rem')">All</button></div>
+    ${pendR.map(r=>{const s=r.sid?students.find(x=>x.id===r.sid):null;return`
+    <div class="ri"><div class="ric" style="background:${remCo(r.type)}">${remIc(r.type)}</div>
+    <div class="rib"><div class="rit">${r.title}</div><div class="rim">${s?s.name+' · ':''} ${fds(r.date)}</div></div>
+    <span class="bdg ${priB(r.pri)}">${priL(r.pri)}</span></div>`}).join('')}</div>`:''}
+    ${recM.length?`<div class="wid"><div class="wh">📁 Recent Materials <button class="ws" onclick="sv('t_mat')">All</button></div>
+    ${recM.map(m=>{const s=students.find(x=>x.id===m.sid);return`
+    <div class="mfi"><div class="mfic" style="background:${miCo(m.type)}">${miIc(m.type)}</div>
+    <div style="flex:1;min-width:0"><div class="mfn">${m.name}</div><div class="mfm">${s?s.name+' · ':''} ${fds(m.date)}</div></div>
+    </div>`}).join('')}</div>`:''}
+    <div class="two">
+      <div class="wid"><div class="wh">📆 Tomorrow</div>
+      ${tmSch.length?tmSch.map(c=>{const s=students.find(x=>x.id===c.sid);return`
+      <div class="si"><div class="si-t">${f12(c.st)}</div><div class="si-d" style="background:${s.color}"></div>
+      <div class="si-i"><div class="si-n" style="font-size:12px">${s.name}</div><div class="si-m">${c.subj}</div></div></div>`}).join('')
+      :`<div class="empty" style="padding:16px"><p style="font-size:12px">No classes</p></div>`}</div>
+      <div class="wid"><div class="wh">👥 Students</div>
+      ${myS.map(s=>{const p=pct(cp(s),s.att.length);return`
+      <div style="padding:9px 13px;border-bottom:1px solid var(--bdrs)">
+        <div style="display:flex;align-items:center;gap:7px;margin-bottom:4px">
+          <div class="sav" style="background:${s.color};width:22px;height:22px;font-size:8px">${ini(s.name)}</div>
+          <span style="font-size:11px;font-weight:600">${s.name.split(' ')[0]}</span>
+          <span style="font-size:11px;font-weight:700;margin-left:auto;color:${p>=75?'var(--gr)':p>=50?'var(--am)':'var(--rd)'}">${p}%</span>
+        </div>
+        <div class="pb"><div class="pf ${p>=75?'g':p>=50?'a':'r'}" style="width:${p}%"></div></div>
+      </div>`}).join('')}</div>
+    </div>`;
+  }
+  else if(id==='t_sched'){
+    mc.innerHTML=`<div class="shd"><div><div class="stitle">Class Schedule</div></div><button class="btn bp2" onclick="openAddCls()">+ Class</button></div>
+    ${['2026-06-23','2026-06-24','2026-06-25','2026-06-26','2026-06-27'].map(date=>{
+      const dc=sch.filter(c=>c.date===date&&c.tid===1);if(!dc.length)return'';
+      return`<div class="card"><div class="chd"><span class="ctitle">${fd(date)}</span><span class="bdg ${date===TD?'ba':'bk'}">${date===TD?'Today':dc.length+' class'+(dc.length>1?'es':'')}</span></div>
+      ${dc.map(c=>{const s=students.find(x=>x.id===c.sid);return`
+      <div class="si"><div class="si-t">${f12(c.st)}<br><span style="color:var(--ink-pale)">${f12(c.et)}</span></div>
+      <div class="si-d" style="background:${s.color}"></div>
+      <div class="si-i"><div class="si-n">${s.name}</div><div class="si-m">${c.subj}${c.notes?' · '+c.notes:''}</div></div>
+      ${date===TD?`<button class="btn bg2 bsm" onclick="markDone(${c.id})">✓</button>`:''}
+      </div>`}).join('')}</div>`;}).join('')}`;
+  }
+  else if(id==='t_stu'){
+    mc.innerHTML=`<div class="shd"><div><div class="stitle">My Students</div><div class="ssub">${myS.length} assigned</div></div></div>
+    <div class="card"><div class="tw"><table><thead><tr><th>Student</th><th>Subject</th><th>Classes</th><th>Attendance</th><th>Balance</th></tr></thead>
+    <tbody>${myS.map(s=>{const p=pct(cp(s),s.att.length);return`<tr class="cr" onclick="openAtt(${s.id})">
+      <td>${svc(s)}</td><td><span class="bdg bb">${s.subject}</span></td><td>${cp(s)}/${s.att.length}</td>
+      <td><div style="min-width:70px"><div style="font-size:11px;font-weight:600;color:${p>=75?'var(--gr)':p>=50?'var(--am)':'var(--rd)'}">${p}%</div>
+      <div class="pb"><div class="pf ${p>=75?'g':p>=50?'a':'r'}" style="width:${p}%"></div></div></div></td>
+      <td><b style="color:${bal(s)>0?'var(--rd)':'var(--gr)'}">${bal(s)>0?fc(bal(s))+' due':'Clear ✓'}</b></td>
+    </tr>`}).join('')}</tbody></table></div></div>`;
+  }
+  else if(id==='t_att'){
+    mc.innerHTML=`<div class="shd"><div><div class="stitle">Mark Attendance</div><div class="ssub">Tap a student to update</div></div></div>
+    ${myS.map(s=>{const p=pct(cp(s),s.att.length);return`
+    <div class="card" style="cursor:pointer" onclick="openAtt(${s.id})">
+      <div style="padding:13px 14px;display:flex;align-items:center;gap:12px">
+        <div class="sav" style="background:${s.color};width:38px;height:38px;font-size:13px">${ini(s.name)}</div>
+        <div style="flex:1;min-width:0">
+          <div style="font-weight:600;font-size:13px">${s.name} <span class="bdg bb" style="margin-left:4px">${s.subject}</span></div>
+          <div style="font-size:11px;color:var(--ink-soft);margin-top:2px">${cp(s)} present · ${ca(s)} absent</div>
+        </div>
+        <div style="text-align:right;flex-shrink:0">
+          <div style="font-size:15px;font-weight:800;color:${p>=75?'var(--gr)':p>=50?'var(--am)':'var(--rd)'}">${p}%</div>
+          <div style="font-size:10px;color:var(--ink-pale)">attendance</div>
+        </div>
+      </div>
+    </div>`}).join('')}`;
+  }
+  else if(id==='t_syl'){
+    mc.innerHTML=`<div class="shd"><div><div class="stitle">Syllabus Tracker</div></div></div>
+    ${myS.map(s=>{const dn=s.cd,tot=s.cl.length,dp=pct(dn,tot);return`
+    <div class="card"><div class="chd">
+      <div style="display:flex;align-items:center;gap:8px">
+        <div class="sav" style="background:${s.color};width:27px;height:27px;font-size:9px">${ini(s.name)}</div>
+        <div><div class="ctitle">${s.name}</div><div style="font-size:11px;color:var(--ink-soft)">${s.subject}</div></div>
+      </div>
+      <div style="text-align:right"><div style="font-size:17px;font-weight:800;color:${dp>=75?'var(--gr)':dp>=50?'var(--am)':'var(--rd)'}">${dp}%</div>
+      <div style="font-size:10px;color:var(--ink-pale)">${dn}/${tot}</div></div>
+    </div>
+    <div style="padding:7px 14px 3px"><div class="pb" style="height:7px"><div class="pf ${dp>=75?'g':dp>=50?'a':'r'}" style="width:${dp}%"></div></div></div>
+    ${s.cl.map((c,i)=>`<div class="ci" onclick="toggleChap(${s.id},${i})">
+      <div class="cc ${i<dn?'dn':''}">${i<dn?'✓':''}</div>
+      <span style="font-size:12px;color:${i<dn?'var(--ink-soft)':'var(--ink)'};${i<dn?'text-decoration:line-through':''}">Ch ${i+1}: ${c}</span>
+      ${i===dn?'<span class="bdg ba" style="margin-left:auto">Next</span>':''}
+    </div>`).join('')}</div>`;}).join('')}`;
+  }
+  else if(id==='t_ex'){
+    const allEx=myS.flatMap(s=>s.exams.map(e=>({...e,s,d:du(e.date)}))).sort((a,b)=>a.d-b.d);
+    mc.innerHTML=`<div class="shd"><div><div class="stitle">Exam Tracker</div><div class="ssub">${allEx.length} exams</div></div>
+    <button class="btn bp2" onclick="openAddEx()">+ Exam</button></div>
+    ${allEx.filter(e=>e.d>=0&&e.d<=7).length?`<div class="card"><div class="chd"><span class="ctitle">🚨 This Week</span></div>
+    ${allEx.filter(e=>e.d>=0&&e.d<=7).map(e=>`<div class="ea ${e.d<=1?'ea-d':e.d<=3?'ea-w':'ea-i'}">
+      <span style="font-size:15px">${e.d<=1?'🚨':e.d<=3?'⚠️':'📅'}</span>
+      <div style="flex:1;min-width:0"><div style="font-size:12px;font-weight:700">${e.name} — ${e.s.name}</div>
+      <div style="font-size:11px;color:var(--ink-soft)">${e.subject} · ${fd(e.date)}</div></div>
+      <span class="bdg ${e.d<=1?'br':e.d<=3?'ba':'bb'}">${e.d===0?'Today':e.d===1?'Tomorrow':'In '+e.d+'d'}</span>
+    </div>`).join('')}</div>`:''}
+    <div class="card"><div class="tw"><table><thead><tr><th>Exam</th><th>Student</th><th>Subject</th><th>Date</th><th>In</th></tr></thead>
+    <tbody>${allEx.map(e=>`<tr><td><b>${e.name}</b></td>
+      <td><div class="savc"><div class="sav" style="background:${e.s.color};width:22px;height:22px;font-size:8px">${ini(e.s.name)}</div><span>${e.s.name}</span></div></td>
+      <td><span class="bdg bb">${e.subject}</span></td><td>${fd(e.date)}</td>
+      <td><span class="bdg ${e.d<0?'bg':e.d<=1?'br':e.d<=3?'ba':'bk'}">${e.d<0?'Done':e.d===0?'Today':e.d===1?'Tomorrow':e.d+'d'}</span></td>
+    </tr>`).join('')}</tbody></table></div></div>`;
+  }
+  else if(id==='t_mat'){
+    const myM=mats.filter(m=>myS.some(s=>s.id===m.sid));
+    mc.innerHTML=`<div class="shd"><div><div class="stitle">Study Materials</div><div class="ssub">${myM.length} files</div></div>
+    <button class="btn bp2" onclick="openUpload()">+ Upload</button></div>
+    ${myS.map(s=>{const sm=myM.filter(m=>m.sid===s.id);if(!sm.length)return'';
+      const subs=[...new Set(sm.map(m=>m.subj))];
+      return`<div class="card"><div class="chd"><div style="display:flex;align-items:center;gap:8px">${svc(s)}</div>
+      <span class="bdg bk">${sm.length} files</span></div>
+      ${subs.map(sub=>{const fm=sm.filter(m=>m.subj===sub);return`
+      <div style="padding:6px 14px;background:var(--bdrs);font-size:11px;font-weight:600;color:var(--ink-soft);border-bottom:1px solid var(--bdr)">${sub}</div>
+      ${fm.map(m=>`<div class="mfi">
+        <div class="mfic" style="background:${miCo(m.type)}">${miIc(m.type)}</div>
+        <div style="flex:1;min-width:0"><div class="mfn">${m.name}</div><div class="mfm">${m.size} · ${fds(m.date)}</div></div>
+        <div style="display:flex;gap:4px">
+          <button class="btn bgh bxs" onclick="toast('👁️ Opening...','ti')">View</button>
+          <button class="btn bo bxs" onclick="toast('⬇️ Downloading...','ts')">↓</button>
+          <button class="btn bxs" style="background:var(--rdl);color:var(--rd)" onclick="delM(${m.id})">✕</button>
+        </div>
+      </div>`).join('')}`}).join('')}</div>`;}).join('')}`;
+  }
+  else if(id==='t_rem'){
+    mc.innerHTML=`<div class="shd"><div><div class="stitle">Reminders</div><div class="ssub">${rems.filter(r=>!r.done).length} pending</div></div>
+    <button class="btn bp2" onclick="openAddRem()">+ Add</button></div>
+    ${['high','medium','low'].map(pri=>{const gr=rems.filter(r=>r.pri===pri&&!r.done);if(!gr.length)return'';
+      return`<div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--ink-soft);margin:12px 0 5px">${priL(pri)} Priority</div>
+      <div class="card">${gr.map(r=>{const s=r.sid?students.find(x=>x.id===r.sid):null;return`
+      <div class="ri"><div class="ric" style="background:${remCo(r.type)}">${remIc(r.type)}</div>
+        <div class="rib" style="flex:1;min-width:0"><div class="rit">${r.title}</div>
+        <div class="rim">${s?s.name+' · ':''} ${fds(r.date)} ${r.time}${r.notes?' · '+r.notes:''}</div></div>
+        <div style="display:flex;gap:4px;flex-shrink:0">
+          <button class="btn bg2 bxs" onclick="doneRem(${r.id})">✓</button>
+          <button class="btn bxs" style="background:var(--rdl);color:var(--rd)" onclick="delRem(${r.id})">✕</button>
+        </div>
+      </div>`}).join('')}</div>`;}).join('')}
+    ${rems.filter(r=>r.done).length?`<div style="font-size:11px;font-weight:700;text-transform:uppercase;color:var(--ink-pale);margin:12px 0 5px">Completed</div>
+    <div class="card">${rems.filter(r=>r.done).map(r=>`<div class="ri" style="opacity:.5">
+      <div class="ric" style="background:var(--bdrs)">${remIc(r.type)}</div>
+      <div class="rib"><div class="rit" style="text-decoration:line-through">${r.title}</div></div>
+      <button class="btn bgh bxs" onclick="undoRem(${r.id})">Undo</button>
+    </div>`).join('')}</div>`:''}`;
+  }
+  else if(id==='t_hist'){
+    mc.innerHTML=`<div class="shd"><div><div class="stitle">Attendance History</div><div class="ssub">Complete class log</div></div>
+    <select class="fsl" style="width:auto;padding:6px 24px 6px 9px" onchange="rHist(this.value)">
+      ${myS.map(s=>`<option value="${s.id}">${s.name}</option>`).join('')}
+    </select></div><div id="hb"></div>`;
+    rHist(myS[0].id);
+  }
+  else if(id==='t_sum'){
+    const tp=myS.reduce((a,s)=>a+cp(s),0),tab=myS.reduce((a,s)=>a+ca(s),0),tr=myS.reduce((a,s)=>a+tf(s),0);
+    mc.innerHTML=`<div class="shd"><div><div class="stitle">Monthly Summary</div><div class="ssub">June 2026</div></div></div>
+    <div class="sg">
+      <div class="sc"><div class="sl">Classes Conducted</div><div class="sv a">${tp}</div></div>
+      <div class="sc"><div class="sl">Classes Missed</div><div class="sv r">${tab}</div></div>
+      <div class="sc"><div class="sl">Total Hours</div><div class="sv g">${tp} hrs</div></div>
+      <div class="sc"><div class="sl">Fees Generated</div><div class="sv g" style="font-size:15px">${fc(tr)}</div></div>
+    </div>
+    <div class="card"><div class="tw"><table><thead><tr><th>Student</th><th>Present</th><th>Missed</th><th>Fee/Class</th><th>Total Due</th><th>Paid</th><th>Balance</th></tr></thead>
+    <tbody>${myS.map(s=>`<tr>
+      <td>${svc(s)}</td>
+      <td><span class="bdg bg">✓ ${cp(s)}</span></td><td><span class="bdg br">✗ ${ca(s)}</span></td>
+      <td>${fc(s.fpc)}</td><td><b>${fc(tf(s))}</b></td>
+      <td style="color:var(--gr)">${fc(s.paid)}</td>
+      <td><b style="color:${bal(s)>0?'var(--rd)':'var(--gr)'}">${bal(s)>0?fc(bal(s))+' due':'Clear ✓'}</b></td>
+    </tr>`).join('')}</tbody></table></div></div>`;
+  }
+}
+
+function rHist(sid){
+  const s=students.find(x=>x.id==sid);const el=document.getElementById('hb');if(!el)return;
+  const sorted=[...s.att].sort((a,b)=>new Date(b.date)-new Date(a.date));
+  el.innerHTML=`<div class="card">${sorted.map(a=>`<div class="hi">
+    <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:9px;flex-wrap:wrap">
+      <div><div class="hid">${fd(a.date)}</div>
+        <div class="hit">${a.st&&a.et?`${f12(a.st)} – ${f12(a.et)} · ${a.dur}`:'Session'}</div>
+        ${a.chapter?`<div style="font-size:11px;color:var(--ac);margin-top:3px">📖 ${a.chapter}</div>`:''}
+      </div>
+      <span class="bdg ${a.status==='present'?'bg':'br'}">${a.status==='present'?'✓ Present':'✗ Absent'}</span>
+    </div>
+  </div>`).join('')}</div>`;
+}
+
+function openAtt(sid){
+  const s=students.find(x=>x.id===sid);
+  const rec=[...s.att].sort((a,b)=>new Date(b.date)-new Date(a.date)).slice(0,8);
+  om(`<div style="display:flex;align-items:center;gap:11px;margin-bottom:14px">
+    <div class="sav" style="background:${s.color};width:40px;height:40px;font-size:13px">${ini(s.name)}</div>
+    <div><div class="mt" style="margin-bottom:0">${s.name}</div>
+    <div style="font-size:12px;color:var(--ink-soft)">${s.grade} · ${s.subject} · ${fc(s.fpc)}/class</div></div>
+  </div>
+  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-bottom:14px">
+    <div style="background:var(--grl);border-radius:9px;padding:10px;text-align:center">
+      <div style="font-size:17px;font-weight:800;color:var(--gr)">${cp(s)}</div>
+      <div style="font-size:10px;color:var(--gr)">Present</div></div>
+    <div style="background:var(--rdl);border-radius:9px;padding:10px;text-align:center">
+      <div style="font-size:17px;font-weight:800;color:var(--rd)">${ca(s)}</div>
+      <div style="font-size:10px;color:var(--rd)">Absent</div></div>
+    <div style="background:var(--acl);border-radius:9px;padding:10px;text-align:center">
+      <div style="font-size:15px;font-weight:800;color:var(--ac)">${fc(tf(s))}</div>
+      <div style="font-size:10px;color:var(--ac)">Total Due</div></div>
+  </div>
+  <div style="font-size:11px;font-weight:600;color:var(--ink-soft);margin-bottom:7px;text-transform:uppercase">Recent Records</div>
+  <div style="max-height:240px;overflow-y:auto;border:1px solid var(--bdr);border-radius:10px">
+    ${rec.map((a,i)=>`<div style="display:flex;align-items:center;justify-content:space-between;padding:9px 12px;border-bottom:1px solid var(--bdrs)">
+      <div><div style="font-size:12px;font-weight:500">${fd(a.date)}</div>
+      ${a.chapter?`<div style="font-size:10px;color:var(--ink-soft)">📖 ${a.chapter}</div>`:''}
+      </div>
+      <div style="display:flex;gap:5px">
+        <button onclick="tAtt(${s.id},${s.att.length-1-i},'present')" style="width:27px;height:27px;border-radius:50%;border:2px solid ${a.status==='present'?'var(--gr)':'var(--bdr)'};background:${a.status==='present'?'var(--grl)':'#fff'};cursor:pointer;font-size:11px;-webkit-appearance:none">✓</button>
+        <button onclick="tAtt(${s.id},${s.att.length-1-i},'absent')" style="width:27px;height:27px;border-radius:50%;border:2px solid ${a.status==='absent'?'var(--rd)':'var(--bdr)'};background:${a.status==='absent'?'var(--rdl)':'#fff'};cursor:pointer;font-size:11px;-webkit-appearance:none">✗</button>
+      </div>
+    </div>`).join('')}
+  </div>
+  <div class="mf"><button class="btn bp2" onclick="cm()">Done</button></div>`);
+}
+
+function tAtt(sid,idx,status){
+  const s=students.find(x=>x.id===sid);
+  if(s.att[idx]){s.att[idx].status=status;if(!s.flags.includes('Attendance edited on '+s.att[idx].date))s.flags.push('Attendance edited on '+s.att[idx].date);}
+  toast(status==='present'?'✅ Marked Present':'❌ Marked Absent',status==='present'?'ts':'');
+  openAtt(sid);
+}
+function toggleChap(sid,idx){const s=students.find(x=>x.id===sid);if(idx===s.cd)s.cd++;else if(idx===s.cd-1)s.cd--;toast('Syllabus updated!','ts');rv('t_syl')}
+function markDone(cid){const c=sch.find(x=>x.id===cid);if(!c)return;const s=students.find(x=>x.id===c.sid);s.att.push({date:c.date,status:'present',chapter:'',st:c.st,et:c.et,dur:'1 hr',notes:''});toast('✅ Class complete!','ts');rv(vw)}
+function delM(id){const i=mats.findIndex(m=>m.id===id);if(i>-1)mats.splice(i,1);toast('Deleted','');rv('t_mat')}
+function doneRem(id){const r=rems.find(x=>x.id===id);if(r)r.done=true;toast('✅ Done!','ts');rv(vw)}
+function undoRem(id){const r=rems.find(x=>x.id===id);if(r)r.done=false;rv(vw)}
+function delRem(id){const i=rems.findIndex(x=>x.id===id);if(i>-1)rems.splice(i,1);toast('Deleted','');rv(vw)}
+
+function openAddCls(){om(`<div class="mt">Schedule a Class</div><div class="ms">Add to your schedule</div>
+  <div class="fr"><label class="fl">Student</label><select class="fsl" id="sc_s">${students.filter(s=>s.tid===1).map(s=>`<option value="${s.id}">${s.name}</option>`).join('')}</select></div>
+  <div class="fr"><label class="fl">Subject</label><input class="fi" id="sc_sub" placeholder="e.g. Maths"/></div>
+  <div class="fr"><label class="fl">Date</label><input class="fi" id="sc_dt" type="date" value="${TD}"/></div>
+  <div class="fr2">
+    <div class="fr"><label class="fl">Start</label><input class="fi" id="sc_st" type="time" value="17:00"/></div>
+    <div class="fr"><label class="fl">End</label><input class="fi" id="sc_et" type="time" value="18:00"/></div>
+  </div>
+  <div class="fr"><label class="fl">Notes</label><input class="fi" id="sc_n" placeholder="Optional"/></div>
+  <div class="mf"><button class="btn bo" onclick="cm()">Cancel</button><button class="btn bp2" onclick="saveCls()">Schedule</button></div>`)}
+
+function saveCls(){
+  const sid=+document.getElementById('sc_s').value;
+  const sub=document.getElementById('sc_sub').value||students.find(s=>s.id===sid).subject;
+  sch.push({id:sch.length+100,sid,subj:sub,date:document.getElementById('sc_dt').value,st:document.getElementById('sc_st').value,et:document.getElementById('sc_et').value,notes:document.getElementById('sc_n').value,tid:1});
+  cm();toast('📅 Scheduled!','ts');rv('t_sched');
+}
+
+function openAddEx(){const myS=students.filter(s=>s.tid===1);
+  om(`<div class="mt">Add Exam</div><div class="ms">Track an upcoming test</div>
+  <div class="fr"><label class="fl">Student</label><select class="fsl" id="ex_s">${myS.map(s=>`<option value="${s.id}">${s.name}</option>`).join('')}</select></div>
+  <div class="fr"><label class="fl">Exam Name</label><input class="fi" id="ex_n" placeholder="e.g. Unit Test 3"/></div>
+  <div class="fr"><label class="fl">Subject</label><input class="fi" id="ex_sub" placeholder="e.g. Maths"/></div>
+  <div class="fr"><label class="fl">Date</label><input class="fi" id="ex_dt" type="date"/></div>
+  <div class="mf"><button class="btn bo" onclick="cm()">Cancel</button><button class="btn bp2" onclick="saveEx()">Add Exam</button></div>`);}
+function saveEx(){const sid=+document.getElementById('ex_s').value,name=document.getElementById('ex_n').value,date=document.getElementById('ex_dt').value;if(!name||!date){toast('Fill all fields','tw');return;}students.find(s=>s.id===sid).exams.push({name,subject:document.getElementById('ex_sub').value,date});cm();toast('📝 Exam added!','ts');rv('t_ex')}
+
+function openUpload(){om(`<div class="mt">Upload Study Material</div><div class="ms">Add notes, PDFs, worksheets or images</div>
+  <div class="fr"><label class="fl">Student</label><select class="fsl" id="up_s">${students.filter(s=>s.tid===1).map(s=>`<option value="${s.id}">${s.name}</option>`).join('')}</select></div>
+  <div class="fr"><label class="fl">Subject</label><input class="fi" id="up_sub" placeholder="e.g. Maths"/></div>
+  <div class="fr"><label class="fl">File Type</label><select class="fsl" id="up_t"><option value="pdf">📄 PDF</option><option value="notes">📋 Notes</option><option value="worksheet">📝 Worksheet</option><option value="image">🖼️ Image</option></select></div>
+  <div class="fr"><label class="fl">File Name</label><input class="fi" id="up_n" placeholder="e.g. Chapter 5 Notes.pdf"/></div>
+  <div style="border:2px dashed var(--bdr);border-radius:10px;padding:20px;text-align:center;background:var(--bdrs);margin-bottom:12px">
+    <div style="font-size:26px;margin-bottom:6px">📁</div>
+    <div style="font-size:13px;font-weight:600;color:var(--ink-mid)">Tap to choose file</div>
+    <div style="font-size:11px;color:var(--ink-soft);margin-top:3px">PDF, Images, Docs supported</div>
+  </div>
+  <div class="mf"><button class="btn bo" onclick="cm()">Cancel</button><button class="btn bp2" onclick="saveMat()">Upload</button></div>`);}
+function saveMat(){const sid=+document.getElementById('up_s').value;const name=document.getElementById('up_n').value||'New File';const type=document.getElementById('up_t').value;const sub=document.getElementById('up_sub').value||students.find(s=>s.id===sid).subject;mats.push({id:mats.length+100,sid,subj:sub,name,type,size:'—',date:TD,by:'Mr. Suresh Kumar'});cm();toast('📁 Uploaded!','ts');rv('t_mat')}
+
+function openAddRem(){om(`<div class="mt">Add Reminder</div><div class="ms">Set a reminder for any task</div>
+  <div class="fr"><label class="fl">Title</label><input class="fi" id="rm_t" placeholder="e.g. Collect fees from Rahul"/></div>
+  <div class="fr"><label class="fl">Type</label><select class="fsl" id="rm_type">
+    <option value="class">📅 Class</option><option value="exam">📝 Exam</option>
+    <option value="fee">💰 Fee Collection</option><option value="parent">👨‍👩‍👧 Parent Meeting</option>
+    <option value="homework">📚 Homework Follow-up</option><option value="custom">⭐ Custom</option>
+  </select></div>
+  <div class="fr"><label class="fl">Student (optional)</label><select class="fsl" id="rm_s">
+    <option value="">— None —</option>${students.map(s=>`<option value="${s.id}">${s.name}</option>`).join('')}
+  </select></div>
+  <div class="fr2">
+    <div class="fr"><label class="fl">Date</label><input class="fi" id="rm_dt" type="date" value="${TD}"/></div>
+    <div class="fr"><label class="fl">Time</label><input class="fi" id="rm_tm" type="time" value="10:00"/></div>
+  </div>
+  <div class="fr"><label class="fl">Priority</label><select class="fsl" id="rm_pri">
+    <option value="high">🔴 High</option><option value="medium">🟡 Medium</option><option value="low">🟢 Low</option>
+  </select></div>
+  <div class="fr"><label class="fl">Notes</label><textarea class="fta" id="rm_notes" placeholder="Optional details"></textarea></div>
+  <div class="mf"><button class="btn bo" onclick="cm()">Cancel</button><button class="btn bp2" onclick="saveRem()">Save</button></div>`);}
+function saveRem(){const title=document.getElementById('rm_t').value;if(!title){toast('Enter a title','tw');return;}const sid=document.getElementById('rm_s').value;rems.push({id:rems.length+100,title,type:document.getElementById('rm_type').value,sid:sid?+sid:null,date:document.getElementById('rm_dt').value,time:document.getElementById('rm_tm').value,pri:document.getElementById('rm_pri').value,notes:document.getElementById('rm_notes').value,done:false});cm();toast('🔔 Reminder set!','ts');rv('t_rem')}
+
+// ═══ COORDINATOR ═══
+function setupC(){bn([
+  {id:'c_home',l:'🏠 Overview'},{id:'c_stu',l:'👥 Students'},
+  {id:'c_tea',l:'🧑‍🏫 Teachers'},{id:'c_asgn',l:'🔗 Assign'},
+  {id:'c_att',l:'📊 Attendance'},{id:'c_pay',l:'💰 Payments'},
+  {id:'c_ex',l:'📝 Exams'},{id:'c_mat',l:'📁 Materials'},
+  {id:'c_rem',l:'🔔 Reminders'},{id:'c_rep',l:'📈 Reports'},
+]);sv('c_home')}
+
+function rC(id){
+  const mc=document.getElementById('mc');
+  const tR=students.reduce((a,s)=>a+tf(s),0),tP=students.reduce((a,s)=>a+s.paid,0);
+  const tPend=students.reduce((a,s)=>a+Math.max(0,bal(s)),0),tCls=students.reduce((a,s)=>a+cp(s),0);
+
+  if(id==='c_home'){
+    const tSch=sch.filter(c=>c.date===TD);
+    const upEx=students.flatMap(s=>s.exams.map(e=>({...e,student:s,d:du(e.date)}))).filter(e=>e.d>=0&&e.d<=5).sort((a,b)=>a.d-b.d);
+    const pR=rems.filter(r=>!r.done&&du(r.date)<=2&&du(r.date)>=0).slice(0,3);
+    const pPay=students.filter(s=>bal(s)>0).sort((a,b)=>bal(b)-bal(a)).slice(0,5);
+    mc.innerHTML=`<div class="shd"><div><div class="stitle">Coordinator Overview</div><div class="ssub">${fd(TD)}</div></div></div>
+    <div class="sg">
+      <div class="sc"><div class="sl">Total Students</div><div class="sv a">${students.length}</div><span class="sbdg sg-b">Active</span></div>
+      <div class="sc"><div class="sl">Total Teachers</div><div class="sv g">${teachers.length}</div></div>
+      <div class="sc"><div class="sl">Classes This Month</div><div class="sv am">${tCls}</div></div>
+      <div class="sc"><div class="sl">Fees Collected</div><div class="sv g" style="font-size:14px">${fc(tP)}</div></div>
+      <div class="sc"><div class="sl">Pending Payments</div><div class="sv r" style="font-size:14px">${fc(tPend)}</div><span class="sbdg sg-r">Due</span></div>
+      <div class="sc"><div class="sl">Upcoming Exams</div><div class="sv p">${upEx.length}</div></div>
+    </div>
+    <div class="two">
+      <div class="wid"><div class="wh">📍 Today's Schedule</div>
+      ${tSch.length?tSch.map(c=>{const s=students.find(x=>x.id===c.sid);const t=teachers.find(x=>x.id===c.tid);return`
+      <div class="si"><div class="si-t">${f12(c.st)}</div><div class="si-d" style="background:${s.color}"></div>
+      <div class="si-i"><div class="si-n" style="font-size:12px">${s.name}</div><div class="si-m">${t?t.name.split(' ').slice(1).join(' '):''}</div></div>
+      </div>`}).join(''):`<div class="empty" style="padding:18px"><p>No classes today</p></div>`}
+      </div>
+      <div class="wid"><div class="wh">⚠️ Payment Alerts <button class="ws" onclick="sv('c_pay')">All</button></div>
+      ${pPay.map(s=>`<div class="pr" onclick="openPay(${s.id})">
+        <div class="sav" style="background:${s.color};width:25px;height:25px;font-size:8px">${ini(s.name)}</div>
+        <div style="flex:1;min-width:0"><div style="font-size:12px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${s.name}</div></div>
+        <span style="font-size:12px;font-weight:800;color:var(--rd)">${fc(bal(s))}</span>
+      </div>`).join('')}
+      </div>
+    </div>
+    ${upEx.length?`<div class="wid"><div class="wh">📝 Upcoming Exams <button class="ws" onclick="sv('c_ex')">All</button></div>
+    ${upEx.slice(0,4).map(e=>`<div class="ea ${e.d<=1?'ea-d':e.d<=3?'ea-w':'ea-i'}" style="margin:7px">
+      <span style="font-size:14px">${e.d<=1?'🚨':'⚠️'}</span>
+      <div style="flex:1;min-width:0"><div style="font-size:12px;font-weight:700">${e.name} — ${e.student.name}</div>
+      <div style="font-size:11px;color:var(--ink-soft)">${e.subject} · ${fd(e.date)}</div></div>
+      <span class="bdg ${e.d<=1?'br':e.d<=3?'ba':'bb'}">${e.d===0?'Today':e.d===1?'Tomorrow':e.d+'d'}</span>
+    </div>`).join('')}</div>`:''}
+    ${pR.length?`<div class="wid"><div class="wh">🔔 Reminders <button class="ws" onclick="sv('c_rem')">All</button></div>
+    ${pR.map(r=>{const s=r.sid?students.find(x=>x.id===r.sid):null;return`<div class="ri">
+      <div class="ric" style="background:${remCo(r.type)}">${remIc(r.type)}</div>
+      <div class="rib"><div class="rit">${r.title}</div><div class="rim">${s?s.name+' · ':''} ${fds(r.date)}</div></div>
+    </div>`}).join('')}</div>`:''}`;
+  }
+  else if(id==='c_stu'){
+    mc.innerHTML=`<div class="shd"><div><div class="stitle">All Students</div><div class="ssub">${students.length} enrolled</div></div></div>
+    <div class="card"><div class="tw"><table><thead><tr><th>Student</th><th>Subject</th><th>Teacher</th><th>Attendance</th><th>Balance</th></tr></thead>
+    <tbody>${students.map(s=>{const t=teachers.find(x=>x.id===s.tid);const p=pct(cp(s),s.att.length);return`<tr>
+      <td>${svc(s)}</td><td><span class="bdg bb">${s.subject}</span></td>
+      <td style="font-size:11px">${t?t.name:'—'}</td>
+      <td><div style="min-width:70px"><div style="font-size:11px;font-weight:600;color:${p>=75?'var(--gr)':'var(--am)'}">${p}%</div>
+      <div class="pb"><div class="pf ${p>=75?'g':'a'}" style="width:${p}%"></div></div></div></td>
+      <td><b style="color:${bal(s)>0?'var(--rd)':'var(--gr)'}">${bal(s)>0?fc(bal(s))+' due':'Clear ✓'}</b></td>
+    </tr>`}).join('')}</tbody></table></div></div>`;
+  }
+  else if(id==='c_tea'){
+    mc.innerHTML=`<div class="shd"><div><div class="stitle">Teachers</div></div></div>
+    ${teachers.map(t=>{const ts=students.filter(s=>s.tid===t.id);const tc=ts.reduce((a,s)=>a+cp(s),0);const tr2=ts.reduce((a,s)=>a+tf(s),0);return`
+    <div class="card"><div style="padding:14px;display:flex;align-items:center;gap:12px;flex-wrap:wrap">
+      <div class="sav" style="background:${t.color};width:42px;height:42px;font-size:14px;border-radius:11px">${ini(t.name)}</div>
+      <div style="flex:1;min-width:100px"><div style="font-weight:700;font-size:14px">${t.name}</div>
+      <div style="font-size:11px;color:var(--ink-soft)">${t.subject} · ${t.exp} · ${t.qual}</div></div>
+      <div style="display:flex;gap:11px;flex-wrap:wrap">
+        <div style="text-align:center"><div style="font-size:16px;font-weight:800;color:var(--ac)">${ts.length}</div><div style="font-size:10px;color:var(--ink-soft)">Students</div></div>
+        <div style="text-align:center"><div style="font-size:16px;font-weight:800;color:var(--gr)">${tc}</div><div style="font-size:10px;color:var(--ink-soft)">Classes</div></div>
+        <div style="text-align:center"><div style="font-size:13px;font-weight:800;color:var(--am)">${fc(tr2)}</div><div style="font-size:10px;color:var(--ink-soft)">Revenue</div></div>
+      </div></div>
+      <div style="background:var(--bdrs);padding:8px 14px;font-size:11px;color:var(--ink-soft)">Students: ${ts.map(s=>s.name).join(' · ')||'None'}</div>
+    </div>`;}).join('')}`;
+  }
+  else if(id==='c_asgn'){
+    mc.innerHTML=`<div class="shd"><div><div class="stitle">Assign Teachers</div></div></div>
+    <div class="card"><div class="tw"><table><thead><tr><th>Student</th><th>Subject</th><th>Teacher</th><th>Change</th></tr></thead>
+    <tbody>${students.map(s=>`<tr>
+      <td>${svc(s)}</td><td><span class="bdg bb">${s.subject}</span></td>
+      <td style="font-size:11px">${(teachers.find(t=>t.id===s.tid)||{name:'—'}).name}</td>
+      <td><select class="fsl" style="padding:4px 22px 4px 8px;font-size:11px" onchange="reassign(${s.id},this.value)">
+        ${teachers.map(t=>`<option value="${t.id}" ${s.tid===t.id?'selected':''}>${t.name}</option>`).join('')}
+      </select></td>
+    </tr>`).join('')}</tbody></table></div></div>`;
+  }
+  else if(id==='c_att'){
+    mc.innerHTML=`<div class="shd"><div><div class="stitle">Attendance Summary</div></div></div>
+    <div class="sg">
+      <div class="sc"><div class="sl">Total Classes</div><div class="sv a">${students.reduce((a,s)=>a+s.att.length,0)}</div></div>
+      <div class="sc"><div class="sl">Total Present</div><div class="sv g">${students.reduce((a,s)=>a+cp(s),0)}</div></div>
+      <div class="sc"><div class="sl">Total Absent</div><div class="sv r">${students.reduce((a,s)=>a+ca(s),0)}</div></div>
+      <div class="sc"><div class="sl">Avg Rate</div><div class="sv">${Math.round(students.reduce((a,s)=>a+pct(cp(s),s.att.length),0)/students.length)}%</div></div>
+    </div>
+    <div class="card"><div class="tw"><table><thead><tr><th>Student</th><th>Present</th><th>Absent</th><th>Rate</th><th>Status</th></tr></thead>
+    <tbody>${students.map(s=>{const p=pct(cp(s),s.att.length);return`<tr>
+      <td>${svc(s)}</td>
+      <td><span class="bdg bg">✓ ${cp(s)}</span></td><td><span class="bdg br">✗ ${ca(s)}</span></td>
+      <td><div style="display:flex;align-items:center;gap:7px;min-width:75px">
+        <div class="pb" style="width:48px"><div class="pf ${p>=75?'g':'a'}" style="width:${p}%"></div></div>
+        <span style="font-size:11px;font-weight:600">${p}%</span>
+      </div></td>
+      <td><span class="bdg ${p>=75?'bg':p>=50?'ba':'br'}">${p>=75?'Good':p>=50?'Low':'Critical'}</span></td>
+    </tr>`}).join('')}</tbody></table></div></div>`;
+  }
+  else if(id==='c_pay'){
+    mc.innerHTML=`<div class="shd"><div><div class="stitle">Payment Tracker</div></div></div>
+    <div class="sg">
+      <div class="sc"><div class="sl">Total Billed</div><div class="sv a" style="font-size:14px">${fc(tR)}</div></div>
+      <div class="sc"><div class="sl">Collected</div><div class="sv g" style="font-size:14px">${fc(tP)}</div></div>
+      <div class="sc"><div class="sl">Outstanding</div><div class="sv r" style="font-size:14px">${fc(tPend)}</div></div>
+      <div class="sc"><div class="sl">Collection %</div><div class="sv">${Math.round(tP/tR*100)}%</div></div>
+    </div>
+    <div class="card">${students.map(s=>{const b=bal(s);const p=Math.min(100,Math.round(s.paid/Math.max(1,tf(s))*100));return`
+    <div class="pr" onclick="openPay(${s.id})">
+      <div class="sav" style="background:${s.color}">${ini(s.name)}</div>
+      <div style="flex:1;min-width:0">
+        <div style="font-weight:600;font-size:13px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${s.name}</div>
+        <div style="font-size:11px;color:var(--ink-soft)">${cp(s)} classes × ${fc(s.fpc)}</div>
+        <div class="pb" style="margin-top:5px;width:80px"><div class="pf g" style="width:${p}%"></div></div>
+      </div>
+      <div style="text-align:right;flex-shrink:0">
+        <div class="prb ${b<=0?'pd':''}">${b>0?fc(b)+' due':'Paid ✓'}</div>
+        <div style="font-size:10px;color:var(--ink-pale)">Paid: ${fc(s.paid)}</div>
+      </div>
+    </div>`}).join('')}</div>`;
+  }
+  else if(id==='c_ex'){
+    const all=students.flatMap(s=>s.exams.map(e=>({...e,student:s,d:du(e.date)}))).sort((a,b)=>a.d-b.d);
+    mc.innerHTML=`<div class="shd"><div><div class="stitle">Exam Schedule</div><div class="ssub">${all.length} exams</div></div></div>
+    ${all.filter(e=>e.d>=0&&e.d<=7).length?`<div class="card"><div class="chd"><span class="ctitle">⚠️ This Week</span></div>
+    ${all.filter(e=>e.d>=0&&e.d<=7).map(e=>`<div class="ea ${e.d<=1?'ea-d':e.d<=3?'ea-w':'ea-i'}">
+      <span style="font-size:15px">${e.d<=1?'🚨':'⚠️'}</span>
+      <div style="flex:1;min-width:0"><div style="font-size:12px;font-weight:700">${e.name} — ${e.student.name}</div>
+      <div style="font-size:11px;color:var(--ink-soft)">${e.subject} · ${fd(e.date)}</div></div>
+      <span class="bdg ${e.d<=1?'br':e.d<=3?'ba':'bb'}">${e.d===0?'Today':e.d===1?'Tomorrow':e.d+'d'}</span>
+    </div>`).join('')}</div>`:''}
+    <div class="card"><div class="tw"><table><thead><tr><th>Exam</th><th>Student</th><th>Subject</th><th>Date</th><th>In</th></tr></thead>
+    <tbody>${all.map(e=>`<tr><td><b>${e.name}</b></td>
+      <td><div class="savc"><div class="sav" style="background:${e.student.color};width:22px;height:22px;font-size:8px">${ini(e.student.name)}</div><span>${e.student.name}</span></div></td>
+      <td><span class="bdg bb">${e.subject}</span></td><td>${fd(e.date)}</td>
+      <td><span class="bdg ${e.d<0?'bg':e.d<=1?'br':e.d<=3?'ba':'bk'}">${e.d<0?'Done':e.d===0?'Today':e.d===1?'Tomorrow':e.d+'d'}</span></td>
+    </tr>`).join('')}</tbody></table></div></div>`;
+  }
+  else if(id==='c_mat'){
+    mc.innerHTML=`<div class="shd"><div><div class="stitle">Study Materials</div><div class="ssub">${mats.length} files</div></div>
+    <button class="btn bp2" onclick="openUpload()">+ Upload</button></div>
+    ${students.map(s=>{const sm=mats.filter(m=>m.sid===s.id);if(!sm.length)return'';
+      const subs=[...new Set(sm.map(m=>m.subj))];
+      return`<div class="card"><div class="chd"><div style="display:flex;align-items:center;gap:8px">${svc(s)}</div><span class="bdg bk">${sm.length} files</span></div>
+      ${subs.map(sub=>{const fm=sm.filter(m=>m.subj===sub);return`
+      <div style="padding:6px 14px;background:var(--bdrs);font-size:11px;font-weight:600;color:var(--ink-soft);border-bottom:1px solid var(--bdr)">${sub}</div>
+      ${fm.map(m=>`<div class="mfi">
+        <div class="mfic" style="background:${miCo(m.type)}">${miIc(m.type)}</div>
+        <div style="flex:1;min-width:0"><div class="mfn">${m.name}</div><div class="mfm">${m.size} · ${fds(m.date)} · ${m.by}</div></div>
+        <div style="display:flex;gap:4px">
+          <button class="btn bgh bxs" onclick="toast('👁️ Opening...','ti')">View</button>
+          <button class="btn bo bxs" onclick="toast('⬇️ Downloading...','ts')">↓</button>
+        </div>
+      </div>`).join('')}`}).join('')}</div>`;}).join('')}`;
+  }
+  else if(id==='c_rem'){
+    mc.innerHTML=`<div class="shd"><div><div class="stitle">Reminders</div><div class="ssub">${rems.filter(r=>!r.done).length} pending</div></div>
+    <button class="btn bp2" onclick="openAddRem()">+ Add</button></div>
+    <div class="card">${rems.filter(r=>!r.done).map(r=>{const s=r.sid?students.find(x=>x.id===r.sid):null;return`
+    <div class="ri"><div class="ric" style="background:${remCo(r.type)}">${remIc(r.type)}</div>
+      <div class="rib" style="flex:1;min-width:0"><div class="rit">${r.title}</div>
+      <div class="rim">${s?s.name+' · ':''} ${fds(r.date)} ${r.time}</div></div>
+      <div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px;flex-shrink:0">
+        <span class="bdg ${priB(r.pri)}">${priL(r.pri)}</span>
+        <button class="btn bg2 bxs" onclick="doneRem(${r.id})">✓ Done</button>
+      </div>
+    </div>`}).join('')}</div>`;
+  }
+  else if(id==='c_rep'){
+    mc.innerHTML=`<div class="shd"><div><div class="stitle">Monthly Reports</div><div class="ssub">June 2026</div></div></div>
+    <div class="sg">
+      <div class="sc"><div class="sl">Classes Conducted</div><div class="sv a">${tCls}</div></div>
+      <div class="sc"><div class="sl">Classes Missed</div><div class="sv r">${students.reduce((a,s)=>a+ca(s),0)}</div></div>
+      <div class="sc"><div class="sl">Total Hours</div><div class="sv g">${tCls} hrs</div></div>
+      <div class="sc"><div class="sl">Revenue</div><div class="sv g" style="font-size:14px">${fc(tR)}</div></div>
+    </div>
+    <div style="font-size:13px;font-weight:700;margin-bottom:10px">Per Teacher</div>
+    ${teachers.map(t=>{const ts=students.filter(s=>s.tid===t.id);const tc=ts.reduce((a,s)=>a+cp(s),0);const tr2=ts.reduce((a,s)=>a+tf(s),0);return`
+    <div class="card" style="padding:13px 14px;margin-bottom:9px">
+      <div style="display:flex;align-items:center;gap:9px;margin-bottom:9px">
+        <div class="sav" style="background:${t.color};width:32px;height:32px;border-radius:8px;font-size:10px">${ini(t.name)}</div>
+        <div><div style="font-weight:700">${t.name}</div><div style="font-size:11px;color:var(--ink-soft)">${t.subject}</div></div>
+      </div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <div style="background:var(--acl);border-radius:7px;padding:7px 10px;flex:1;min-width:65px;text-align:center"><div style="font-weight:700;color:var(--ac)">${ts.length}</div><div style="font-size:10px;color:var(--ink-soft)">Students</div></div>
+        <div style="background:var(--grl);border-radius:7px;padding:7px 10px;flex:1;min-width:65px;text-align:center"><div style="font-weight:700;color:var(--gr)">${tc}</div><div style="font-size:10px;color:var(--ink-soft)">Classes</div></div>
+        <div style="background:var(--aml);border-radius:7px;padding:7px 10px;flex:1;min-width:65px;text-align:center"><div style="font-weight:700;font-size:12px;color:var(--am)">${fc(tr2)}</div><div style="font-size:10px;color:var(--ink-soft)">Revenue</div></div>
+        <div style="background:var(--bdrs);border-radius:7px;padding:7px 10px;flex:1;min-width:65px;text-align:center"><div style="font-weight:700">${tc} hrs</div><div style="font-size:10px;color:var(--ink-soft)">Hours</div></div>
+      </div>
+    </div>`}).join('')}
+    <div style="font-size:13px;font-weight:700;margin:13px 0 9px">Generate Invoices</div>
+    <div class="card">${students.map(s=>`
+    <div style="display:flex;align-items:center;gap:9px;padding:11px 14px;border-bottom:1px solid var(--bdrs)">
+      ${svc(s)}
+      <div style="margin-left:auto;display:flex;gap:7px;align-items:center;flex-shrink:0">
+        <span style="font-size:12px;font-weight:700;color:${bal(s)>0?'var(--rd)':'var(--gr)'}">${bal(s)>0?fc(bal(s))+' due':'Paid ✓'}</span>
+        <button class="btn bp2 bsm" onclick="openInv(${s.id})">📄 Invoice</button>
+      </div>
+    </div>`).join('')}</div>`;
+  }
+}
+function reassign(sid,tid){students.find(s=>s.id===sid).tid=+tid;toast('🔗 Reassigned!','ts');rv('c_asgn')}
+
+function openPay(sid){
+  const s=students.find(x=>x.id===sid),due=tf(s),b=bal(s);
+  om(`<div style="display:flex;align-items:center;gap:11px;margin-bottom:14px">
+    <div class="sav" style="background:${s.color};width:40px;height:40px;font-size:13px">${ini(s.name)}</div>
+    <div><div class="mt" style="margin-bottom:0">${s.name}</div><div style="font-size:12px;color:var(--ink-soft)">${s.grade} · ${s.subject}</div></div>
+  </div>
+  <div style="background:var(--bdrs);border-radius:10px;padding:12px;margin-bottom:12px">
+    <div style="display:flex;justify-content:space-between;margin-bottom:5px"><span style="font-size:12px;color:var(--ink-soft)">Fee per class</span><b>${fc(s.fpc)}</b></div>
+    <div style="display:flex;justify-content:space-between;margin-bottom:5px"><span style="font-size:12px;color:var(--ink-soft)">Classes attended</span><b>${cp(s)}</b></div>
+    <div style="display:flex;justify-content:space-between;margin-bottom:5px"><span style="font-size:12px;color:var(--rd)">Classes missed</span><b style="color:var(--rd)">${ca(s)}</b></div>
+    <div style="height:1px;background:var(--bdr);margin:8px 0"></div>
+    <div style="display:flex;justify-content:space-between;margin-bottom:5px"><b>Total Due</b><b style="font-size:14px">${fc(due)}</b></div>
+    <div style="display:flex;justify-content:space-between;margin-bottom:5px"><span style="color:var(--gr)">Paid</span><b style="color:var(--gr)">${fc(s.paid)}</b></div>
+    <div style="height:1px;background:var(--bdr);margin:8px 0"></div>
+    <div style="display:flex;justify-content:space-between"><b>Balance</b><b style="font-size:16px;color:${b>0?'var(--rd)':'var(--gr)'}">${b>0?fc(b)+' pending':'Fully Paid ✓'}</b></div>
+  </div>
+  ${b>0?`<div class="fr"><label class="fl">Record Payment Amount</label><input class="fi" id="pa" type="number" placeholder="Enter amount" min="1"/></div>`:''}
+  <div class="mf">
+    <button class="btn bo" onclick="cm()">Close</button>
+    ${b>0?`<button class="btn bg2" onclick="recPay(${sid})">Record Payment</button>`:''}
+    <button class="btn bp2" onclick="openInv(${sid})">📄 Invoice</button>
+  </div>`);
+}
+function recPay(sid){const amt=parseFloat((document.getElementById('pa')||{}).value||0);if(!amt||amt<=0){toast('Enter valid amount','tw');return;}students.find(s=>s.id===sid).paid+=amt;cm();toast('💰 Payment recorded!','ts');rv(vw)}
+
+// ═══ FOUNDER ═══
+function setupF(){bn([
+  {id:'f_home',l:'📊 Overview'},{id:'f_rev',l:'💰 Revenue'},
+  {id:'f_stu',l:'👥 Students'},{id:'f_pay',l:'💳 Payments'},
+  {id:'f_audit',l:'🔍 Audit'},{id:'f_rep',l:'📄 Reports'},
+]);sv('f_home')}
+
+function rF(id){
+  const mc=document.getElementById('mc');
+  const tR=students.reduce((a,s)=>a+tf(s),0),tP=students.reduce((a,s)=>a+s.paid,0);
+  const tPend=students.reduce((a,s)=>a+Math.max(0,bal(s)),0),tCls=students.reduce((a,s)=>a+cp(s),0);
+  const avgA=Math.round(students.reduce((a,s)=>a+pct(cp(s),s.att.length),0)/students.length);
+
+  if(id==='f_home'){
+    const upEx=students.flatMap(s=>s.exams.map(e=>({...e,student:s,d:du(e.date)}))).filter(e=>e.d>=0&&e.d<=7).sort((a,b)=>a.d-b.d);
+    mc.innerHTML=`<div class="shd"><div><div class="stitle">Business Dashboard</div><div class="ssub">June 2026 · Live data</div></div></div>
+    <div class="sg">
+      <div class="sc" style="border-left:4px solid var(--ac)"><div class="sl">Active Students</div><div class="sv a">${students.length}</div><span class="sbdg sg-b">↑ +3 this month</span></div>
+      <div class="sc" style="border-left:4px solid var(--gr)"><div class="sl">Active Teachers</div><div class="sv g">${teachers.length}</div></div>
+      <div class="sc" style="border-left:4px solid var(--am)"><div class="sl">Classes Conducted</div><div class="sv am">${tCls}</div></div>
+      <div class="sc" style="border-left:4px solid var(--gr)"><div class="sl">Revenue Billed</div><div class="sv g" style="font-size:14px">${fc(tR)}</div></div>
+      <div class="sc"><div class="sl">Collected</div><div class="sv g" style="font-size:14px">${fc(tP)}</div></div>
+      <div class="sc"><div class="sl">Pending</div><div class="sv r" style="font-size:14px">${fc(tPend)}</div><span class="sbdg sg-r">Overdue</span></div>
+      <div class="sc"><div class="sl">Avg Attendance</div><div class="sv">${avgA}%</div><span class="sbdg ${avgA>=75?'sg-g':'sg-a'}">${avgA>=75?'Healthy':'Attention'}</span></div>
+      <div class="sc"><div class="sl">Monthly Growth</div><div class="sv g">+12%</div><span class="sbdg sg-g">↑ vs May</span></div>
+    </div>
+    <div class="two">
+      <div class="wid"><div class="wh">Revenue by Student <button class="ws" onclick="sv('f_rev')">Full</button></div>
+      ${students.sort((a,b)=>tf(b)-tf(a)).slice(0,6).map(s=>{const p=pct(tf(s),tR);return`
+      <div style="padding:9px 13px;border-bottom:1px solid var(--bdrs)">
+        <div style="display:flex;justify-content:space-between;margin-bottom:4px">
+          <div style="display:flex;align-items:center;gap:6px">
+            <div class="sav" style="background:${s.color};width:21px;height:21px;font-size:8px">${ini(s.name)}</div>
+            <span style="font-size:11px;font-weight:500">${s.name}</span>
+          </div>
+          <span style="font-size:11px;font-weight:700;color:var(--gr)">${fc(tf(s))}</span>
+        </div>
+        <div class="pb"><div class="pf g" style="width:${p}%"></div></div>
+      </div>`}).join('')}
+      </div>
+      <div class="wid"><div class="wh">Teacher Performance</div>
+      ${teachers.map(t=>{const ts=students.filter(s=>s.tid===t.id);const tc=ts.reduce((a,s)=>a+cp(s),0);const tr2=ts.reduce((a,s)=>a+tf(s),0);return`
+      <div style="padding:11px 13px;border-bottom:1px solid var(--bdrs)">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:7px">
+          <div class="sav" style="background:${t.color};width:30px;height:30px;border-radius:8px">${ini(t.name)}</div>
+          <div style="min-width:0"><div style="font-weight:600;font-size:11px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${t.name}</div><div style="font-size:10px;color:var(--ink-soft)">${t.subject}</div></div>
+        </div>
+        <div style="display:flex;gap:6px">
+          <div style="background:var(--acl);border-radius:5px;padding:5px 8px;flex:1;text-align:center"><div style="font-weight:700;color:var(--ac);font-size:12px">${ts.length}</div><div style="font-size:9px;color:var(--ink-soft)">Stu</div></div>
+          <div style="background:var(--grl);border-radius:5px;padding:5px 8px;flex:1;text-align:center"><div style="font-weight:700;color:var(--gr);font-size:12px">${tc}</div><div style="font-size:9px;color:var(--ink-soft)">Cls</div></div>
+          <div style="background:var(--aml);border-radius:5px;padding:5px 8px;flex:1;text-align:center"><div style="font-weight:700;color:var(--am);font-size:10px">${fc(tr2)}</div><div style="font-size:9px;color:var(--ink-soft)">Rev</div></div>
+        </div>
+      </div>`}).join('')}
+      </div>
+    </div>
+    ${upEx.length?`<div class="wid"><div class="wh">📝 Upcoming Exams</div>
+    ${upEx.slice(0,4).map(e=>`<div class="ea ${e.d<=1?'ea-d':e.d<=3?'ea-w':'ea-i'}" style="margin:7px">
+      <span style="font-size:14px">${e.d<=1?'🚨':'⚠️'}</span>
+      <div style="flex:1;min-width:0"><b style="font-size:12px">${e.name}</b> — <span style="font-size:11px">${e.student.name}</span></div>
+      <span class="bdg ${e.d<=1?'br':e.d<=3?'ba':'bb'}">${e.d===0?'Today':e.d===1?'Tomorrow':e.d+'d'}</span>
+    </div>`).join('')}</div>`:''}`;
+  }
+  else if(id==='f_rev'){
+    const maxF=students.reduce((a,s)=>a+s.att.length*s.fpc,0);
+    mc.innerHTML=`<div class="shd"><div><div class="stitle">Revenue Report</div><div class="ssub">June 2026</div></div></div>
+    <div class="sg">
+      <div class="sc"><div class="sl">Total Billed</div><div class="sv g" style="font-size:14px">${fc(tR)}</div></div>
+      <div class="sc"><div class="sl">If 100% Att.</div><div class="sv p" style="font-size:14px">${fc(maxF)}</div></div>
+      <div class="sc"><div class="sl">Avg Per Student</div><div class="sv" style="font-size:14px">${fc(Math.round(tR/students.length))}</div></div>
+      <div class="sc"><div class="sl">Monthly Growth</div><div class="sv g">+12%</div></div>
+    </div>
+    <div class="card">${students.map(s=>{const max=s.att.length*s.fpc;const p=pct(tf(s),max);return`
+    <div style="padding:12px 14px;border-bottom:1px solid var(--bdrs)">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;flex-wrap:wrap;gap:7px">
+        <div style="display:flex;align-items:center;gap:8px">${svc(s)}</div>
+        <div style="text-align:right"><div style="font-weight:800;font-size:14px;color:var(--gr)">${fc(tf(s))}</div><div style="font-size:10px;color:var(--ink-pale)">of ${fc(max)} max</div></div>
+      </div>
+      <div class="pb" style="height:6px"><div class="pf g" style="width:${p}%"></div></div>
+      <div style="font-size:10px;color:var(--ink-soft);margin-top:3px">${p}% of potential · ${cp(s)} classes × ${fc(s.fpc)}</div>
+    </div>`}).join('')}</div>`;
+  }
+  else if(id==='f_stu'){
+    mc.innerHTML=`<div class="shd"><div><div class="stitle">All Students</div></div></div>
+    <div class="card"><div class="tw"><table><thead><tr><th>Student</th><th>Subject</th><th>Fee/Cls</th><th>Present</th><th>Missed</th><th>Due</th><th>Paid</th><th>Balance</th></tr></thead>
+    <tbody>${students.map(s=>`<tr class="cr" onclick="openPay(${s.id})">
+      <td>${svc(s)}</td><td><span class="bdg bb">${s.subject}</span></td>
+      <td>${fc(s.fpc)}</td>
+      <td><span class="bdg bg">✓ ${cp(s)}</span></td><td><span class="bdg br">✗ ${ca(s)}</span></td>
+      <td><b>${fc(tf(s))}</b></td>
+      <td style="color:var(--gr)">${fc(s.paid)}</td>
+      <td><b style="color:${bal(s)>0?'var(--rd)':'var(--gr)'}">${bal(s)>0?fc(bal(s)):' Clear ✓'}</b></td>
+    </tr>`).join('')}
+    <tr style="background:var(--bdrs)"><td colspan="3"><b>TOTAL</b></td>
+      <td><b style="color:var(--gr)">${tCls}</b></td>
+      <td><b style="color:var(--rd)">${students.reduce((a,s)=>a+ca(s),0)}</b></td>
+      <td><b>${fc(tR)}</b></td>
+      <td><b style="color:var(--gr)">${fc(tP)}</b></td>
+      <td><b style="color:var(--rd)">${fc(tPend)}</b></td>
+    </tr></tbody></table></div></div>`;
+  }
+  else if(id==='f_pay'){
+    mc.innerHTML=`<div class="shd"><div><div class="stitle">Payment Tracker</div></div></div>
+    <div class="sg">
+      <div class="sc"><div class="sl">Total Billed</div><div class="sv" style="font-size:14px">${fc(tR)}</div></div>
+      <div class="sc"><div class="sl">Collected</div><div class="sv g" style="font-size:14px">${fc(tP)}</div></div>
+      <div class="sc"><div class="sl">Outstanding</div><div class="sv r" style="font-size:14px">${fc(tPend)}</div></div>
+      <div class="sc"><div class="sl">Collection Rate</div><div class="sv">${Math.round(tP/tR*100)}%</div></div>
+    </div>
+    <div class="card">${students.map(s=>{const b=bal(s);const p=Math.min(100,Math.round(s.paid/Math.max(1,tf(s))*100));return`
+    <div style="padding:12px 14px;border-bottom:1px solid var(--bdrs)">
+      <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:7px;margin-bottom:6px">
+        <div style="display:flex;align-items:center;gap:8px">${svc(s)}</div>
+        <div style="display:flex;gap:12px;text-align:right;flex-shrink:0">
+          <div><div style="font-size:10px;color:var(--ink-soft)">Total Due</div><div style="font-weight:700;font-size:13px">${fc(tf(s))}</div></div>
+          <div><div style="font-size:10px;color:var(--gr)">Paid</div><div style="font-weight:700;font-size:13px;color:var(--gr)">${fc(s.paid)}</div></div>
+          <div><div style="font-size:10px;color:${b>0?'var(--rd)':'var(--gr)'}">${b>0?'Balance':'Status'}</div>
+            <div style="font-weight:800;font-size:14px;color:${b>0?'var(--rd)':'var(--gr)'}">${b>0?fc(b):'Clear ✓'}</div></div>
+        </div>
+      </div>
+      <div class="pb" style="height:5px"><div class="pf g" style="width:${p}%"></div></div>
+      <div style="font-size:10px;color:var(--ink-soft);margin-top:3px">${p}% collected</div>
+    </div>`}).join('')}</div>`;
+  }
+  else if(id==='f_audit'){
+    const allF=students.flatMap(s=>s.flags.map(f=>({flag:f,student:s})));
+    mc.innerHTML=`<div class="shd"><div><div class="stitle">Attendance Audit</div><div class="ssub">Billing accuracy &amp; dispute prevention</div></div></div>
+    <div class="sg">
+      <div class="sc"><div class="sl">Total Flags</div><div class="sv r">${allF.length}</div></div>
+      <div class="sc"><div class="sl">Students Flagged</div><div class="sv am">${students.filter(s=>s.flags.length>0).length}</div></div>
+      <div class="sc"><div class="sl">Clean Records</div><div class="sv g">${students.filter(s=>s.flags.length===0).length}</div></div>
+      <div class="sc"><div class="sl">Audit Health</div><div class="sv">${Math.round((1-allF.length/Math.max(1,students.length*2))*100)}%</div></div>
+    </div>
+    ${allF.length?`<div class="card" style="margin-bottom:12px"><div class="chd"><span class="ctitle">⚠️ Flagged Entries</span></div>
+    ${allF.map(f=>{const type=f.flag.includes('Edited')?'edit':f.flag.includes('Missing')?'missing':'unmarked';return`
+    <div class="aic">
+      <div class="aicn" style="background:${type==='edit'?'var(--aml)':type==='missing'?'var(--rdl)':'var(--bdrs)'}">
+        ${type==='edit'?'✏️':type==='missing'?'❓':'⚠️'}
+      </div>
+      <div style="flex:1;min-width:0"><div style="font-weight:600;font-size:13px">${f.student.name}</div>
+        <div style="font-size:11px;color:var(--ink-soft);margin-top:2px">${f.flag}</div></div>
+      <span class="bdg ${type==='edit'?'ba':type==='missing'?'br':'bk'}">${type==='edit'?'Edited':type==='missing'?'Missing':'Unmarked'}</span>
+    </div>`}).join('')}</div>`:''}
+    <div class="card"><div class="chd"><span class="ctitle">All Student Status</span></div>
+    ${students.map(s=>`<div style="display:flex;align-items:center;gap:10px;padding:10px 14px;border-bottom:1px solid var(--bdrs)">
+      <div class="sav" style="background:${s.color}">${ini(s.name)}</div>
+      <div style="flex:1;min-width:0"><div style="font-weight:600;font-size:13px">${s.name}</div>
+      <div style="font-size:11px;color:var(--ink-soft)">${s.flags.length} flag${s.flags.length!==1?'s':''}</div></div>
+      <span class="bdg ${s.flags.length===0?'bg':'ba'}">${s.flags.length===0?'✓ Clean':'⚠ Flagged'}</span>
+    </div>`).join('')}</div>`;
+  }
+  else if(id==='f_rep'){
+    mc.innerHTML=`<div class="shd"><div><div class="stitle">Reports &amp; Invoices</div><div class="ssub">Generate per-student invoices</div></div></div>
+    <div class="card">${students.map(s=>`
+    <div style="display:flex;align-items:center;gap:9px;padding:11px 14px;border-bottom:1px solid var(--bdrs)">
+      ${svc(s,'${fc(tf(s))} due · ${fc(s.paid)} paid')}
+      <div style="margin-left:auto;display:flex;gap:7px;align-items:center;flex-shrink:0">
+        <span style="font-size:12px;font-weight:700;color:${bal(s)>0?'var(--rd)':'var(--gr)'}">${bal(s)>0?fc(bal(s))+' due':'Paid ✓'}</span>
+        <button class="btn bp2 bsm" onclick="openInv(${s.id})">📄 Invoice</button>
+      </div>
+    </div>`).join('')}</div>`;
+  }
+}
+
+// ═══ TUTOR FINDER ═══
+let tFil={q:'',sub:'',loc:'',lvl:''};
+function setupFi(){bn([{id:'fi_srch',l:'🔍 Find Tutors'},{id:'fi_post',l:'📋 Post a Job'}]);sv('fi_srch')}
+
+function rFi(id){
+  const mc=document.getElementById('mc');
+  if(id==='fi_srch'){
+    const subs=[...new Set(tutors.flatMap(t=>t.subjects))].sort();
+    const locs=[...new Set(tutors.map(t=>t.location))].sort();
+    const lvls=[...new Set(tutors.flatMap(t=>t.level))].sort();
+    mc.innerHTML=`<div class="shd"><div><div class="stitle">Find Tutors</div><div class="ssub">${tutors.length} tutors available · Demo data</div></div></div>
+    <div class="fbar">
+      <input class="fi" id="fq" placeholder="🔍 Search by name or subject..." oninput="applyF()" value="${tFil.q}"/>
+      <select class="fsl" id="fsub" onchange="applyF()">
+        <option value="">All Subjects</option>${subs.map(s=>`<option value="${s}" ${tFil.sub===s?'selected':''}>${s}</option>`).join('')}
+      </select>
+      <select class="fsl" id="floc" onchange="applyF()">
+        <option value="">All Locations</option>${locs.map(l=>`<option value="${l}" ${tFil.loc===l?'selected':''}>${l}</option>`).join('')}
+      </select>
+      <select class="fsl" id="flvl" onchange="applyF()">
+        <option value="">All Levels</option>${lvls.map(l=>`<option value="${l}" ${tFil.lvl===l?'selected':''}>${l}</option>`).join('')}
+      </select>
+    </div>
+    <div id="tres"></div>`;
+    applyF();
+  }
+  else if(id==='fi_post'){
+    mc.innerHTML=`<div class="shd"><div><div class="stitle">Post a Tutor Job</div><div class="ssub">Find the right tutor for your student</div></div></div>
+    <div class="card" style="padding:18px">
+      <div class="fr"><label class="fl">Subject Required</label><select class="fsl" id="js"><option>Mathematics</option><option>Physics</option><option>Chemistry</option><option>Biology</option><option>English</option><option>Science</option></select></div>
+      <div class="fr"><label class="fl">Class Level</label><select class="fsl"><option>Class 8-10</option><option>Class 11-12</option><option>JEE</option><option>NEET</option><option>CA Foundation</option></select></div>
+      <div class="fr"><label class="fl">Your Location</label><input class="fi" placeholder="e.g. Pune, Mumbai, Bangalore"/></div>
+      <div class="fr"><label class="fl">Preferred Schedule</label><input class="fi" placeholder="e.g. Weekdays 5PM–7PM"/></div>
+      <div class="fr"><label class="fl">Budget per Class</label><input class="fi" type="number" placeholder="e.g. 800"/></div>
+      <div class="fr"><label class="fl">Additional Requirements</label><textarea class="fta" placeholder="e.g. IIT background preferred, board exam focus..."></textarea></div>
+      <button class="btn bp2" style="width:100%;padding:12px;font-size:14px" onclick="postJob()">Post Job &amp; Find Tutors</button>
+    </div>
+    <div style="background:var(--acl);border:1px solid #c7d2fe;border-radius:11px;padding:14px;margin-top:12px">
+      <div style="font-size:13px;font-weight:700;color:var(--ac);margin-bottom:5px">ℹ️ Demo Mode</div>
+      <div style="font-size:12px;color:var(--ink-soft)">This is a prototype. In the full version, job posts will be matched to tutors on our network. LinkedIn and Naukri integrations coming soon.</div>
+    </div>`;
+  }
+}
+
+function applyF(){
+  tFil.q=(document.getElementById('fq')||{}).value||'';
+  tFil.sub=(document.getElementById('fsub')||{}).value||'';
+  tFil.loc=(document.getElementById('floc')||{}).value||'';
+  tFil.lvl=(document.getElementById('flvl')||{}).value||'';
+  const fil=tutors.filter(t=>{
+    const q=tFil.q.toLowerCase();
+    if(q&&!t.name.toLowerCase().includes(q)&&!t.subjects.join(' ').toLowerCase().includes(q))return false;
+    if(tFil.sub&&!t.subjects.includes(tFil.sub))return false;
+    if(tFil.loc&&t.location!==tFil.loc)return false;
+    if(tFil.lvl&&!t.level.includes(tFil.lvl))return false;
+    return true;
+  });
+  const el=document.getElementById('tres');if(!el)return;
+  if(!fil.length){el.innerHTML=`<div class="empty"><div class="ei">🔍</div><h4>No tutors found</h4><p>Try different filters</p></div>`;return;}
+  el.innerHTML=`<div style="font-size:11px;color:var(--ink-soft);margin-bottom:10px">${fil.length} tutor${fil.length!==1?'s':''} found</div>
+  <div class="tgrid">${fil.map(t=>`
+  <div class="tc">
+    <div style="display:flex;align-items:center;gap:11px;margin-bottom:10px">
+      <div class="sav" style="background:${t.color};width:44px;height:44px;font-size:15px;border-radius:50%">${ini(t.name)}</div>
+      <div style="min-width:0">
+        <div style="font-size:14px;font-weight:700">${t.name}</div>
+        <div style="font-size:11px;color:var(--ink-soft);margin-top:1px">${t.qual}</div>
+        <div style="display:flex;align-items:center;gap:3px;margin-top:2px"><span style="color:#f59e0b">★</span><span style="font-size:11px;font-weight:700">${t.rating}</span><span style="font-size:10px;color:var(--ink-pale)">(${t.rev})</span></div>
+      </div>
+    </div>
+    <div style="display:flex;flex-wrap:wrap;gap:4px;margin-bottom:10px">
+      ${t.subjects.map(s=>`<span class="bdg bb">${s}</span>`).join('')}
+      ${t.level.map(l=>`<span class="bdg bp">${l}</span>`).join('')}
+    </div>
+    <div style="display:flex;flex-wrap:wrap;gap:10px;margin-bottom:12px;font-size:11px;color:var(--ink-soft)">
+      <span>📍 <b>${t.location}</b></span><span>💼 <b>${t.exp}</b></span>
+      <span>⏰ ${t.avail}</span><span>💰 <b>${fc(t.fee)}/class</b></span>
+    </div>
+    <div style="display:flex;gap:7px">
+      <button class="btn bo" style="flex:1" onclick="openTutor(${t.id})">View Profile</button>
+      <button class="btn bp2" style="flex:1" onclick="contactT('${t.name}')">Contact</button>
+    </div>
+  </div>`).join('')}</div>`;
+}
+
+function openTutor(tid){
+  const t=tutors.find(x=>x.id===tid);
+  om(`<div style="display:flex;align-items:center;gap:13px;margin-bottom:16px">
+    <div class="sav" style="background:${t.color};width:52px;height:52px;border-radius:50%;font-size:18px">${ini(t.name)}</div>
+    <div><div class="mt" style="margin-bottom:2px">${t.name}</div>
+      <div style="font-size:12px;color:var(--ink-soft)">${t.qual}</div>
+      <div style="display:flex;align-items:center;gap:3px;margin-top:3px"><span style="color:#f59e0b">★</span><span style="font-size:12px;font-weight:700">${t.rating}</span><span style="font-size:11px;color:var(--ink-pale)">(${t.rev} reviews)</span></div>
+    </div>
+  </div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-bottom:14px">
+    <div style="background:var(--bdrs);border-radius:9px;padding:11px"><div style="font-size:10px;font-weight:600;color:var(--ink-soft);margin-bottom:2px">LOCATION</div><div style="font-weight:600;font-size:13px">📍 ${t.location}</div></div>
+    <div style="background:var(--bdrs);border-radius:9px;padding:11px"><div style="font-size:10px;font-weight:600;color:var(--ink-soft);margin-bottom:2px">EXPERIENCE</div><div style="font-weight:600;font-size:13px">💼 ${t.exp}</div></div>
+    <div style="background:var(--bdrs);border-radius:9px;padding:11px"><div style="font-size:10px;font-weight:600;color:var(--ink-soft);margin-bottom:2px">FEE PER CLASS</div><div style="font-weight:700;font-size:15px;color:var(--gr)">${fc(t.fee)}</div></div>
+    <div style="background:var(--bdrs);border-radius:9px;padding:11px"><div style="font-size:10px;font-weight:600;color:var(--ink-soft);margin-bottom:2px">AVAILABILITY</div><div style="font-size:12px">⏰ ${t.avail}</div></div>
+  </div>
+  <div style="margin-bottom:12px"><div style="font-size:11px;font-weight:600;color:var(--ink-soft);text-transform:uppercase;margin-bottom:6px">Subjects</div>
+    <div style="display:flex;gap:5px;flex-wrap:wrap">${t.subjects.map(s=>`<span class="bdg bb">${s}</span>`).join('')}</div>
+  </div>
+  <div style="margin-bottom:14px"><div style="font-size:11px;font-weight:600;color:var(--ink-soft);text-transform:uppercase;margin-bottom:6px">Class Levels</div>
+    <div style="display:flex;gap:5px;flex-wrap:wrap">${t.level.map(l=>`<span class="bdg bp">${l}</span>`).join('')}</div>
+  </div>
+  <div style="background:var(--grl);border-radius:9px;padding:11px;margin-bottom:14px">
+    <div style="font-size:11px;font-weight:600;color:var(--gr);margin-bottom:3px">AVAILABILITY STATUS</div>
+    <div style="font-size:12px;font-weight:500">✅ Currently accepting new students</div>
+  </div>
+  <div class="mf">
+    <button class="btn bo" onclick="cm()">Close</button>
+    <button class="btn bp2" onclick="contactT('${t.name}')">📞 Contact Tutor</button>
+  </div>`);
+}
+
+function contactT(name){
+  cm();
+  om(`<div class="mt">Contact ${name}</div><div class="ms">Send a message to connect</div>
+  <div class="fr"><label class="fl">Your Name</label><input class="fi" placeholder="Your name"/></div>
+  <div class="fr"><label class="fl">Student's Name</label><input class="fi" placeholder="Student's name"/></div>
+  <div class="fr"><label class="fl">Subject &amp; Level</label><input class="fi" placeholder="e.g. Physics – Class 12"/></div>
+  <div class="fr"><label class="fl">Your Phone / WhatsApp</label><input class="fi" type="tel" placeholder="+91 98765 43210"/></div>
+  <div class="fr"><label class="fl">Message</label><textarea class="fta" placeholder="Describe requirements, schedule preference, location..."></textarea></div>
+  <div class="mf">
+    <button class="btn bo" onclick="cm()">Cancel</button>
+    <button class="btn bp2" onclick="cm();toast('✅ Message sent to ${name}!','ts')">Send Message</button>
+  </div>`);
+}
+function postJob(){cm();toast('📋 Job posted! Matching tutors notified.','ts');setTimeout(()=>sv('fi_srch'),400)}
+
+// ═══ INVOICE ═══
+function openInv(sid){
+  const s=students.find(x=>x.id===sid),t=teachers.find(x=>x.id===s.tid),due=tf(s),b=bal(s);
+  const rows=s.att.filter(a=>a.status==='present').slice(0,10).map((a,i)=>`<tr>
+    <td>${i+1}</td><td>${fd(a.date)}</td>
+    <td>${a.st&&a.et?`${f12(a.st)} – ${f12(a.et)}`:'1 hr session'}</td>
+    <td>${a.chapter||s.subject}</td>
+    <td style="text-align:right">${fc(s.fpc)}</td>
+  </tr>`).join('');
+  om(`<div class="inv">
+    <div class="invh">
+      <div><div class="invl">TutorConnect</div><div style="font-size:10px;color:var(--ink-soft)">Smart Tuition Management</div></div>
+      <div style="text-align:right"><div style="font-size:13px;font-weight:700">INVOICE</div>
+        <div style="font-size:10px;color:var(--ink-soft)">${fd(TD)}</div>
+        <div style="font-size:10px;color:var(--ink-soft)">INV-${String(sid).padStart(4,'0')}-JUN26</div>
+      </div>
+    </div>
+    <div style="display:flex;gap:18px;margin-bottom:13px;flex-wrap:wrap">
+      <div style="flex:1;min-width:100px"><div style="font-size:10px;font-weight:700;text-transform:uppercase;color:var(--ink-soft);margin-bottom:3px">Bill To</div>
+        <div style="font-weight:700">${s.name}</div><div style="font-size:11px;color:var(--ink-soft)">${s.grade} · ${s.subject}</div>
+      </div>
+      <div style="flex:1;min-width:100px"><div style="font-size:10px;font-weight:700;text-transform:uppercase;color:var(--ink-soft);margin-bottom:3px">Tutor</div>
+        <div style="font-weight:700">${t?t.name:'—'}</div><div style="font-size:11px;color:var(--ink-soft)">June 2026</div>
+      </div>
+    </div>
+    <table class="invt"><thead><tr><th>#</th><th>Date</th><th>Time</th><th>Topic</th><th style="text-align:right">Fee</th></tr></thead>
+    <tbody>${rows}</tbody>
+    <tfoot>
+      <tr style="background:var(--bdrs)"><td colspan="4"><b>Subtotal (${cp(s)} classes)</b></td><td style="text-align:right;font-weight:700">${fc(due)}</td></tr>
+      <tr><td colspan="4" style="color:var(--gr)">Amount Paid</td><td style="text-align:right;color:var(--gr)">– ${fc(s.paid)}</td></tr>
+    </tfoot></table>
+    <div style="border-top:2px solid var(--ink);padding-top:9px;margin-top:3px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:7px">
+      <div style="font-size:11px;color:var(--ink-soft)">${b>0?'Please pay at your earliest convenience':'Thank you for your payment! ✓'}</div>
+      <div style="font-size:18px;font-weight:800;color:${b>0?'var(--rd)':'var(--gr)'}">${b>0?fc(b)+' DUE':'PAID ✓'}</div>
+    </div>
+  </div>
+  <div class="mf">
+    <button class="btn bo" onclick="cm()">Close</button>
+    <button class="btn bp2" onclick="toast('🖨️ Print feature in full version!','ti')">🖨️ Print</button>
+  </div>`);
+}
+</script>
+</body>
+</html>
